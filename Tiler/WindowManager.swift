@@ -12,6 +12,17 @@ final class WindowManager {
     
     let sizePositionCalculator = SizePositionCalculator()
     
+    func execute(_ action: Action) {
+        switch action {
+        case .placeWindowIn(let screenArea):
+            placeFrontmostWindow(in: screenArea)
+        case .shrinkWindow(let direction):
+            shrinkFrontmostWindowTowards(direction)
+        case .expandWindow(let direction):
+            expandFrontmostWindowTowards(direction)
+        }
+    }
+    
     // TODO: move to new PermissionsManager or something
     func requestAccessibilityPermission() -> Bool {
         let options: [String: Any] = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as String: true]
@@ -19,7 +30,7 @@ final class WindowManager {
         return isTrusted
     }
     
-    func placeFrontmostWindow(in screenArea: ScreenArea) {
+    private func placeFrontmostWindow(in screenArea: ScreenArea) {
         guard let window = getFrontmostWindow() else {
             // TODO: Log no window to move
             return
@@ -40,7 +51,7 @@ final class WindowManager {
         )
     }
     
-    func shrinkFrontmostWindowTowards(_ shrinkDirection: Direction) {
+    private func shrinkFrontmostWindowTowards(_ shrinkDirection: Direction) {
         guard let window = getFrontmostWindow() else {
             // TODO: Log no window to move
             return
@@ -66,7 +77,7 @@ final class WindowManager {
         )
     }
     
-    func expandFrontmostWindowTowards(_ expandDirection: Direction) {
+    private func expandFrontmostWindowTowards(_ expandDirection: Direction) {
         guard let window = getFrontmostWindow() else {
             // TODO: Log no window to move
             return

@@ -77,20 +77,20 @@ final class StatusBarMenu: NSMenu {
         guard let screenAreaTapped = ScreenArea(rawValue: sender.tag) else {
             return
         }
-        windowManager?.placeFrontmostWindow(in: screenAreaTapped)
+        windowManager?.execute(.placeWindowIn(screenAreaTapped))
     }
     
     @objc private func didTapMenuItemForShrinkDirection(sender: NSMenuItem) {
         guard let shrinkDirectionTapped = Direction(rawValue: sender.tag) else {
             return
         }
-        windowManager?.shrinkFrontmostWindowTowards(shrinkDirectionTapped)
+        windowManager?.execute(.shrinkWindow(shrinkDirectionTapped))
     }
     
     @objc private func didTapMenuItemForExpandDirection(sender: NSMenuItem) {
         guard let expandDirectionTapped = Direction(rawValue: sender.tag) else {
             return
         }
-        windowManager?.expandFrontmostWindowTowards(expandDirectionTapped)
+        windowManager?.execute(.expandWindow(expandDirectionTapped))
     }
 }

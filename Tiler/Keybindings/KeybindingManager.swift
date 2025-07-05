@@ -36,4 +36,12 @@ final class KeybindingManager {
                 
         return action
     }
+    
+    func getKeybinding(for action: Action) -> Keystroke? {
+        let firstMatch = keybindMappings.first { _, value in
+            value == action
+        }
+        
+        return firstMatch?.key
+    }
 }

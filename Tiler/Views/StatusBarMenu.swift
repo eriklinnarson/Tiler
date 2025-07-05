@@ -10,66 +10,56 @@ import AppKit
 final class StatusBarMenu: NSMenu {
     
     private var windowManager: WindowManager?
+    private var keybindingManager: KeybindingManager?
     
-    func setup(windowManager: WindowManager) {
+    func setup(windowManager: WindowManager, keybindingManager: KeybindingManager) {
         self.windowManager = windowManager
+        self.keybindingManager = keybindingManager
         
         ScreenArea.allCases.forEach {
-            let menuItem = menuBarItem(forScreenArea: $0)
+            let menuItem = menuBarItem(for: .placeWindowIn($0))
             addItem(menuItem)
         }
         
         addItem(NSMenuItem.separator())
         
         Direction.allCases.forEach {
-            let menuItem = menuBarItem(forShrinkDirection: $0)
+            let menuItem = menuBarItem(for: .shrinkWindow($0))
             addItem(menuItem)
         }
         
         addItem(NSMenuItem.separator())
         
         Direction.allCases.forEach {
-            let menuItem = menuBarItem(forExpandDirection: $0)
+            let menuItem = menuBarItem(for: .expandWindow($0))
             addItem(menuItem)
         }
     }
     
-    private func menuBarItem(forScreenArea screenArea: ScreenArea) -> NSMenuItem {
+    private func menuBarItem(for action: Action) -> NSMenuItem {
         let menuItem = NSMenuItem()
         
-        menuItem.title = screenArea.localizedName
-        menuItem.image = screenArea.nsImage
-//        menuItem.keyEquivalent = ""
-        menuItem.tag = screenArea.rawValue
+        let selector = switch action {
+        case .placeWindowIn:
+            #selector(didTapMenuItemForScreenArea(sender:))
+        case .shrinkWindow:
+            #selector(didTapMenuItemForShrinkDirection(sender:))
+        case .expandWindow:
+            #selector(didTapMenuItemForExpandDirection(sender:))
+        }
         
-        menuItem.action = #selector(didTapMenuItemForScreenArea(sender:))
+        menuItem.title = action.localizedName
+        menuItem.image = action.nsImage
+        menuItem.tag = action.tag
+        menuItem.action = selector
         menuItem.target = self
-        return menuItem
-    }
-    
-    private func menuBarItem(forShrinkDirection shrinkDirection: Direction) -> NSMenuItem {
-        let menuItem = NSMenuItem()
         
-        menuItem.title = shrinkDirection.shrinkLocalizedName
-        menuItem.image = shrinkDirection.nsImage
-//        menuItem.keyEquivalent = ""
-        menuItem.tag = shrinkDirection.rawValue
-        
-        menuItem.action = #selector(didTapMenuItemForShrinkDirection(sender:))
-        menuItem.target = self
-        return menuItem
-    }
-    
-    private func menuBarItem(forExpandDirection expandDirection: Direction) -> NSMenuItem {
-        let menuItem = NSMenuItem()
-        
-        menuItem.title = expandDirection.expandLocalizedName
-        menuItem.image = expandDirection.nsImage
-//        menuItem.keyEquivalent = ""
-        menuItem.tag = expandDirection.rawValue
-        
-        menuItem.action = #selector(didTapMenuItemForExpandDirection(sender:))
-        menuItem.target = self
+        if let keybinding = keybindingManager?.getKeybinding(for: action) {
+            // Apply keyEquivalent only for having the keybinding visually show up in the menu.
+            // This does not apply listeners for the keybinding, since the app will never be in the foreground.
+            menuItem.keyEquivalentModifierMask = keybinding.modifiers
+            menuItem.keyEquivalent = keyCodeToString(keyCode: keybinding.keyCode)
+        }
         return menuItem
     }
     
@@ -94,3 +84,17 @@ final class StatusBarMenu: NSMenu {
         windowManager?.execute(.expandWindow(expandDirectionTapped))
     }
 }
+
+private extension Action {
+    var tag: Int {
+        switch self {
+        case .placeWindowIn(let screenArea):
+            screenArea.rawValue
+        case .shrinkWindow(let direction):
+            direction.rawValue
+        case .expandWindow(let direction):
+            direction.rawValue
+        }
+    }
+}
+

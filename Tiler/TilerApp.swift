@@ -32,7 +32,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         ) // TODO: Fix menu bar image
         
         let statusBarMenu = StatusBarMenu()
-        statusBarMenu.setup(windowManager: windowManager)
+        statusBarMenu.setup(windowManager: windowManager, keybindingManager: keybindingManager)
         statusBarItem.menu = statusBarMenu
         
         setupKeystrokeListener()

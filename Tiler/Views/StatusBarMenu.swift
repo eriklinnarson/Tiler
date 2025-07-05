@@ -34,6 +34,10 @@ final class StatusBarMenu: NSMenu {
             let menuItem = menuBarItem(for: .expandWindow($0))
             addItem(menuItem)
         }
+        
+        addItem(NSMenuItem.separator())
+        
+        addItem(menuBarQuit())
     }
     
     private func menuBarItem(for action: Action) -> NSMenuItem {
@@ -63,6 +67,15 @@ final class StatusBarMenu: NSMenu {
         return menuItem
     }
     
+    private func menuBarQuit() -> NSMenuItem {
+        let menuItem = NSMenuItem()
+        menuItem.title = "Quit"
+        menuItem.action = #selector(quitApp)
+        menuItem.target = self
+        
+        return menuItem
+    }
+    
     @objc private func didTapMenuItemForScreenArea(sender: NSMenuItem) {
         guard let screenAreaTapped = ScreenArea(rawValue: sender.tag) else {
             return
@@ -82,6 +95,10 @@ final class StatusBarMenu: NSMenu {
             return
         }
         windowManager?.execute(.expandWindow(expandDirectionTapped))
+    }
+    
+    @objc private func quitApp() {
+        NSApplication.shared.terminate(self)
     }
 }
 

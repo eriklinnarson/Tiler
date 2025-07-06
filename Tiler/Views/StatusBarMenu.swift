@@ -6,15 +6,24 @@
 //
 
 import AppKit
+import SwiftUI
 
 final class StatusBarMenu: NSMenu {
     
     private var windowManager: WindowManager?
     private var keybindingManager: KeybindingManager?
+    private var keystrokeListener: KeystrokeListener?
+    private var windowController: NSWindowController?
     
-    func setup(windowManager: WindowManager, keybindingManager: KeybindingManager) {
+    func setup(
+        windowManager: WindowManager,
+        keybindingManager: KeybindingManager,
+        keystrokeListener: KeystrokeListener
+    ) {
         self.windowManager = windowManager
         self.keybindingManager = keybindingManager
+        self.keystrokeListener = keystrokeListener
+        self.windowController = NSWindowController()
         
         ScreenArea.allCases.forEach {
             let menuItem = menuBarItem(for: .placeWindowIn($0))
@@ -37,6 +46,7 @@ final class StatusBarMenu: NSMenu {
         
         addItem(NSMenuItem.separator())
         
+        addItem(menuBarPreferences())
         addItem(menuBarQuit())
     }
     
@@ -62,8 +72,16 @@ final class StatusBarMenu: NSMenu {
             // Apply keyEquivalent only for having the keybinding visually show up in the menu.
             // This does not apply listeners for the keybinding, since the app will never be in the foreground.
             menuItem.keyEquivalentModifierMask = keybinding.modifiers
-            menuItem.keyEquivalent = keyCodeToString(keyCode: keybinding.keyCode)
+            menuItem.keyEquivalent = keyCodeToString(keybinding.keyCode)
         }
+        return menuItem
+    }
+    
+    private func menuBarPreferences() -> NSMenuItem {
+        let menuItem = NSMenuItem()
+        menuItem.title = "Preferences"
+        menuItem.action = #selector(openPreferences)
+        menuItem.target = self
         return menuItem
     }
     
@@ -72,7 +90,6 @@ final class StatusBarMenu: NSMenu {
         menuItem.title = "Quit"
         menuItem.action = #selector(quitApp)
         menuItem.target = self
-        
         return menuItem
     }
     
@@ -97,6 +114,22 @@ final class StatusBarMenu: NSMenu {
         windowManager?.execute(.expandWindow(expandDirectionTapped))
     }
     
+    @objc private func openPreferences() {
+        guard let windowController, let keystrokeListener else {
+            assertionFailure("WindowController not setup.")
+            return
+        }
+        
+        if windowController.window == nil {
+            let hostingViewController = NSHostingController(rootView: SettingsView(keystrokeListener: keystrokeListener))
+            let window = NSWindow(contentViewController: hostingViewController)
+            windowController.window = window
+        }
+        
+        windowController.showWindow(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    
     @objc private func quitApp() {
         NSApplication.shared.terminate(self)
     }
@@ -114,4 +147,3 @@ private extension Action {
         }
     }
 }
-

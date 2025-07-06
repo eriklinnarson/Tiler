@@ -5,10 +5,9 @@
 //  Created by Erik Linnarson on 2025-07-05.
 //
 
-
 import Carbon
 
-func keyCodeToString(keyCode: CGKeyCode) -> String {
+func keyCodeToString(_ keyCode: CGKeyCode) -> String {
     // TODO: Jag är rätt säker på att `.takeRetainedValue` är rätt här, om man följer "Create/Copy"-regeln
     // https://stackoverflow.com/questions/29048826/when-to-use-takeunretainedvalue-or-takeretainedvalue-to-retrieve-unmanaged-o
     // https://nshipster.com/unmanaged/

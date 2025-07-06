@@ -7,16 +7,6 @@
 
 import AppKit
 
-struct Keystroke: Hashable {
-    let keyCode: UInt16
-    let modifiers: NSEvent.ModifierFlags
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(keyCode)
-        hasher.combine(modifiers.rawValue)
-    }
-}
-
 final class KeybindingManager {
     lazy var keybindMappings: [Keystroke: Action] = defaultKeybindings()
     

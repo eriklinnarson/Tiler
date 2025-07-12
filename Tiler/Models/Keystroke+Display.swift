@@ -26,10 +26,10 @@ private extension UInt16 {
         case 0x33: "⌫"
         case 0x75: "⌦"
         case 0x30: "⇥"
-        case 0x7E: "↑"
-        case 0x7D: "↓"
-        case 0x7C: "→"
-        case 0x7B: "←"
+        case 0x7E: "▲"
+        case 0x7D: "▼"
+        case 0x7C: "▶"
+        case 0x7B: "◀"
         default:
             keyCodeToString(self)
         }

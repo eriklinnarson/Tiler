@@ -115,14 +115,20 @@ final class StatusBarMenu: NSMenu {
     }
     
     @objc private func openPreferences() {
-        guard let windowController, let keystrokeListener else {
+        guard let windowController, let keystrokeListener, let keybindingManager else {
             assertionFailure("WindowController not setup.")
             return
         }
         
         if windowController.window == nil {
-            let hostingViewController = NSHostingController(rootView: SettingsView(keystrokeListener: keystrokeListener))
+            let hostingViewController = NSHostingController(
+                rootView: SettingsView(
+                    keystrokeListener: keystrokeListener,
+                    keybindingManager: keybindingManager
+                )
+            )
             let window = NSWindow(contentViewController: hostingViewController)
+            window.title = "Tiler"
             windowController.window = window
         }
         

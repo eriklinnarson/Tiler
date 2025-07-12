@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import SwiftUI
 
 enum Action: Equatable {
     case placeWindowIn(ScreenArea)
@@ -31,6 +32,17 @@ enum Action: Equatable {
             direction.nsImage
         case .expandWindow(let direction):
             direction.nsImage
+        }
+    }
+    
+    var image: Image {
+        switch self {
+        case .placeWindowIn(let screenArea):
+            screenArea.image
+        case .shrinkWindow(let direction):
+            direction.image
+        case .expandWindow(let direction):
+            direction.image
         }
     }
 }

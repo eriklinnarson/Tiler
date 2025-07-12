@@ -34,4 +34,8 @@ final class KeybindingManager {
         
         return firstMatch?.key
     }
+    
+    func setKeybinding(_ keystroke: Keystroke, for action: Action) {
+        keybindMappings[keystroke] = action
+    }
 }

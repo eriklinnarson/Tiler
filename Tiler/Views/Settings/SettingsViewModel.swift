@@ -9,24 +9,21 @@ import Combine
 import SwiftUI
 
 final class SettingsViewModel: ObservableObject {
-    @Published private(set) var mostRecentKeystroke: Keystroke?
     
-    private let keystrokeListener: KeystrokeListener
-    private var cancellables = Set<AnyCancellable>()
-    
-    init(keystrokeListener: KeystrokeListener) {
-        self.keystrokeListener = keystrokeListener
+    enum SettingsTab: String, CaseIterable, Identifiable {
+        case windowSnapping = "Window Snapping"
+        case windowResizing = "Window Resizing"
         
-        setupPublisher()
+        var id: Self { self }
     }
     
-    private func setupPublisher() {
-        keystrokeListener
-            .$keystroke
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.mostRecentKeystroke = $0
-            }
-            .store(in: &cancellables)
+    @Published var selectedTab: SettingsTab = .windowSnapping
+    
+    let keystrokeListener: KeystrokeListener
+    let keybindingManager: KeybindingManager
+    
+    init(keystrokeListener: KeystrokeListener, keybindingManager: KeybindingManager) {
+        self.keystrokeListener = keystrokeListener
+        self.keybindingManager = keybindingManager
     }
 }

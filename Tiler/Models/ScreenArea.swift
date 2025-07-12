@@ -8,7 +8,7 @@
 import Foundation
 
 @objc
-enum ScreenArea: Int, CaseIterable {
+enum ScreenArea: Int, CaseIterable, Identifiable {
     
     case fullScreen
     case leftHalf
@@ -17,6 +17,8 @@ enum ScreenArea: Int, CaseIterable {
     case bottomLeft
     case topRight
     case bottomRight
+    
+    var id: Self { self }
     
     func cgPosition(
         in screen: NSRect,

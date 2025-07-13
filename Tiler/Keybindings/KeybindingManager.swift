@@ -14,12 +14,7 @@ final class KeybindingManager {
     
     func getAction(for keystroke: Keystroke) -> Action? {
         let matchingKeybinding = keybindMappings.keys.first {
-            var pressedModifiers = keystroke.modifiers
-            pressedModifiers.remove(.numericPad)
-            pressedModifiers.remove(.function)
-            
-            return keystroke.keyCode == $0.keyCode &&
-            pressedModifiers == $0.modifiers
+            keystroke.withoutUnwatedModifiers() == $0
         }
         
         guard let matchingKeybinding, let action = keybindMappings[matchingKeybinding] else {
@@ -39,7 +34,7 @@ final class KeybindingManager {
     
     func setKeybinding(_ keystroke: Keystroke, for action: Action) {
         deleteAllKeybindings(to: action)
-        keybindMappings[keystroke] = action
+        keybindMappings[keystroke.withoutUnwatedModifiers()] = action
         postKeybindingsChangedNotification()
     }
     
@@ -62,5 +57,14 @@ final class KeybindingManager {
     
     private func postKeybindingsChangedNotification() {
         NotificationCenter.default.post(name: .keybindingsChanged, object: nil)
+    }
+}
+
+private extension Keystroke {
+    func withoutUnwatedModifiers() -> Self {
+        var modifiers = self.modifiers
+        modifiers.remove(.numericPad)
+        modifiers.remove(.function)
+        return Keystroke(keyCode: keyCode, modifiers: modifiers)
     }
 }

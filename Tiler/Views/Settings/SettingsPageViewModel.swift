@@ -53,12 +53,16 @@ class SettingsPageViewModel: ObservableObject {
     
     func didSelectAction(_ action: Action) {
         if action == selectedActionForRecordKeybinding {
-            selectedActionForRecordKeybinding = nil
-            keystrokeListener.setIgnoreKeystrokes(false)
+            disableKeybindingRecording()
         } else {
             keystrokeListener.setIgnoreKeystrokes(true)
             selectedActionForRecordKeybinding = action
         }
+    }
+    
+    func disableKeybindingRecording() {
+        selectedActionForRecordKeybinding = nil
+        keystrokeListener.setIgnoreKeystrokes(false)
     }
     
     func didTapRemoveKeybinding(forAction action: Action) {
@@ -102,6 +106,7 @@ class SettingsPageViewModel: ObservableObject {
         }
         
         keybindingManager.setKeybinding(keystroke, for: selectedActionForRecordKeybinding)
+        disableKeybindingRecording()
     }
 
     @objc func appWillResignActive(_ notification: Notification) {

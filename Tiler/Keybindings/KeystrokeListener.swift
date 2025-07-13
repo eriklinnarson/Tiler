@@ -10,7 +10,22 @@ import Foundation
 final class KeystrokeListener {
     @Published private(set) var keystroke: Keystroke? = nil
     
+    private var ignoreKeystrokes = false
+    private let lock = NSLock()
+    
     func keystrokeWasCalled(_ keystroke: Keystroke) {
         self.keystroke = keystroke
+    }
+    
+    func getIgnoreKeystrokes() -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return ignoreKeystrokes
+    }
+    
+    func setIgnoreKeystrokes(_ ignoreKeystrokes: Bool) {
+        lock.lock()
+        self.ignoreKeystrokes = ignoreKeystrokes
+        lock.unlock()
     }
 }

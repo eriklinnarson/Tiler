@@ -9,9 +9,6 @@ import AppKit
 
 final class KeybindingManager {
     
-    /// When this is true, the user is recording a keybinding in settings
-    var keybindingRecordingInProgress = false
-    
     @Published
     private(set) var keybindMappings: [Keystroke: Action] = KeybindingManager.defaultKeybindings()
     

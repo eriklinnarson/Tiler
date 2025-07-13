@@ -31,20 +31,20 @@ func handleKeystrokeEvent(
     
     appDelegate.keystrokeListener.keystrokeWasCalled(keystroke)
     
-    let keybindingRecordingInProgress = appDelegate.keybindingManager.keybindingRecordingInProgress
+    let ignoreKeystrokes = appDelegate.keystrokeListener.getIgnoreKeystrokes()
     
     guard let keyboundAction = appDelegate.keybindingManager.getAction(for: keystroke) else {
         // Action was not keybound, let the event pass through.
         // However, if the user is recording a keybinding in settings, we still consume the event.
         // This removes the blip-sound when no app responds to the event.
-        if keybindingRecordingInProgress {
+        if ignoreKeystrokes {
             return nil
         } else {
             return Unmanaged.passUnretained(cgEvent)
         }
     }
     
-    if keybindingRecordingInProgress == false {
+    if ignoreKeystrokes == false {
         appDelegate.windowManager.execute(keyboundAction)
     }
     

@@ -54,9 +54,9 @@ class SettingsPageViewModel: ObservableObject {
     func didSelectAction(_ action: Action) {
         if action == selectedAction {
             selectedAction = nil
-            keybindingManager.keybindingRecordingInProgress = false
+            keystrokeListener.setIgnoreKeystrokes(false)
         } else {
-            keybindingManager.keybindingRecordingInProgress = true
+            keystrokeListener.setIgnoreKeystrokes(true)
             selectedAction = action
         }
     }
@@ -68,7 +68,7 @@ class SettingsPageViewModel: ObservableObject {
     
     func onViewDisappear() {
         selectedAction = nil
-        keybindingManager.keybindingRecordingInProgress = false
+        keystrokeListener.setIgnoreKeystrokes(false)
     }
     
     private func setupSubscribers() {

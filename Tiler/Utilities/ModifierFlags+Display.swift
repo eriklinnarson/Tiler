@@ -16,19 +16,19 @@ extension NSEvent.ModifierFlags {
         }
         
         if self.contains(.shift) {
-            result.append("⇧ ")
+            result.append("⇧")
         }
         
         if self.contains(.control) {
-            result.append("⌃ ")
+            result.append("⌃")
         }
         
         if self.contains(.option) {
-            result.append("⌥ ")
+            result.append("⌥")
         }
         
         if self.contains(.command) {
-            result.append("⌘ ")
+            result.append("⌘")
         }
         
 //        if self.contains(.numericPad) {
@@ -40,11 +40,11 @@ extension NSEvent.ModifierFlags {
 //        }
         
         if self.contains(.function) {
-            result.append("fn ")
+            result.append("fn")
         }
         
         if self.contains(.capsLock) {
-            result.append("⇪ ")
+            result.append("⇪")
         }
         
         return result

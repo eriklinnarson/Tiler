@@ -10,11 +10,7 @@ import AppKit
 final class KeybindingManager {
     
     @Published
-    private(set) var keybindMappings: [Keystroke: Action]
-    
-    init() {
-        keybindMappings = Self.defaultKeybindings()
-    }
+    private(set) var keybindMappings: [Keystroke: Action] = KeybindingManager.defaultKeybindings()
     
     func getAction(for keystroke: Keystroke) -> Action? {
         let matchingKeybinding = keybindMappings.keys.first {

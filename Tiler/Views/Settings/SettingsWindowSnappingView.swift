@@ -22,7 +22,7 @@ struct SettingsWindowSnappingView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: 10) {
             ForEach(viewModel.keybindingCardModels) { cardModel in
                 let isSelected = cardModel.action == viewModel.selectedAction
                 

@@ -40,6 +40,7 @@ final class KeybindingManager {
     
     func removeKeybinding(forAction action: Action) {
         deleteAllKeybindings(to: action)
+        postKeybindingsChangedNotification()
     }
     
     private func deleteAllKeybindings(to action: Action) {

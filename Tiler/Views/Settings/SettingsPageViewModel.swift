@@ -20,9 +20,11 @@ struct KeybindingCardModel: Identifiable {
 }
 
 class SettingsPageViewModel: ObservableObject {
-    let actions: [Action]
-    let keybindingManager: KeybindingManager
-    let keystrokeListener: KeystrokeListener
+    private let actions: [Action]
+    private let keybindingManager: KeybindingManager
+    private let keystrokeListener: KeystrokeListener
+    
+    private var cancellables = Set<AnyCancellable>()
     
     @Published private(set) var selectedAction: Action?
     @Published private var keybindings: [Keystroke: Action] = [:]
@@ -36,8 +38,6 @@ class SettingsPageViewModel: ObservableObject {
             return KeybindingCardModel(action: action, keybinding: keybinding)
         }
     }
-    
-    private var cancellables = Set<AnyCancellable>()
     
     init(
         actions: [Action],

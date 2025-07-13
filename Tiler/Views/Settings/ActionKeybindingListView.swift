@@ -18,7 +18,7 @@ struct ActionKeybindingListView<RowModel: Identifiable, RowView: View>: View {
             }
         }
         .padding()
-        .frame(maxHeight: .infinity, alignment: .topLeading)
+        .frame(alignment: .topLeading)
         .font(.title2)
     }
 }

@@ -26,11 +26,13 @@ struct SettingsWindowSnappingView: View {
             viewModel.rowModel(forAction: $0)
         }
         
-        ActionKeybindingListView(
-            models: rowModels,
-            rowViewBuilder: actionKeybindingRowBuilder(_:)
-        )
-        .onDisappear(perform: viewModel.onViewDisappear)
+        ScrollView {
+            ActionKeybindingListView(
+                models: rowModels,
+                rowViewBuilder: actionKeybindingRowBuilder(_:)
+            )
+            .onDisappear(perform: viewModel.onViewDisappear)
+        }
     }
     
     @ViewBuilder

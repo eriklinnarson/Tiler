@@ -48,7 +48,10 @@ struct SettingsView: View {
                 keystrokeListener: viewModel.keystrokeListener
             )
         case .windowResizing:
-            SettingsWindowResizingView()
+            SettingsWindowResizingView(
+                keybindingManager: viewModel.keybindingManager,
+                keystrokeListener: viewModel.keystrokeListener
+            )
         }
     }
 }

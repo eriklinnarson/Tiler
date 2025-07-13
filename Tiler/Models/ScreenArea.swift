@@ -8,7 +8,7 @@
 import Foundation
 
 @objc
-enum ScreenArea: Int, CaseIterable, Identifiable {
+enum ScreenArea: Int, CaseIterable, Identifiable, Codable {
     
     case fullScreen
     case leftHalf

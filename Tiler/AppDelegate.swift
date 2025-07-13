@@ -11,9 +11,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     var keybindingEventTap: CFMachPort?
     
-    let windowManager = WindowManager()
-    let keybindingManager = KeybindingManager()
-    let keystrokeListener = KeystrokeListener()
+    let windowManager: WindowManager
+    let settingsStorageManager: SettingsStorageManager
+    let keybindingManager: KeybindingManager
+    let keystrokeListener: KeystrokeListener
+    
+    override init() {
+        let windowManager = WindowManager()
+        let settingsStorageManager = SettingsStorageManager(userDefaults: .standard)
+        let keybindMappings = KeybindingManager(settingsStorageManager: settingsStorageManager)
+        let keystrokeListener = KeystrokeListener()
+        
+        self.windowManager = windowManager
+        self.settingsStorageManager = settingsStorageManager
+        self.keybindingManager = keybindMappings
+        self.keystrokeListener = keystrokeListener
+        
+        super.init()
+    }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusBarItem.button?.image = NSImage(

@@ -8,7 +8,7 @@
 import Foundation
 
 @objc
-enum Direction: Int, CaseIterable {
+enum Direction: Int, CaseIterable, Codable {
     case left
     case right
     case up

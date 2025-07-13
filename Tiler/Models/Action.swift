@@ -8,7 +8,7 @@
 import AppKit
 import SwiftUI
 
-enum Action: Equatable, Identifiable {
+enum Action: Equatable, Identifiable, Codable {
     case placeWindowIn(ScreenArea)
     case shrinkWindow(Direction)
     case expandWindow(Direction)

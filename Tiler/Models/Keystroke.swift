@@ -7,9 +7,18 @@
 
 import AppKit
 
-struct Keystroke: Hashable {
+struct Keystroke: Hashable, Codable {
     let keyCode: UInt16
-    let modifiers: NSEvent.ModifierFlags
+    var modifiers: NSEvent.ModifierFlags {
+        NSEvent.ModifierFlags(rawValue: modifiersRaw)
+    }
+    
+    private var modifiersRaw: UInt
+    
+    init(keyCode: UInt16, modifiers: NSEvent.ModifierFlags) {
+        self.keyCode = keyCode
+        self.modifiersRaw = modifiers.rawValue
+    }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(keyCode)

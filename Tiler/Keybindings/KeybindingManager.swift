@@ -9,8 +9,15 @@ import AppKit
 
 final class KeybindingManager {
     
+    let settingsStorageManager: SettingsStorageManager
+    
     @Published
-    private(set) var keybindMappings: [Keystroke: Action] = KeybindingManager.defaultKeybindings()
+    private(set) var keybindMappings: [Keystroke: Action]
+    
+    init(settingsStorageManager: SettingsStorageManager) {
+        self.settingsStorageManager = settingsStorageManager
+        self.keybindMappings = settingsStorageManager.getActionKeybindings()
+    }
     
     func getAction(for keystroke: Keystroke) -> Action? {
         let matchingKeybinding = keybindMappings.keys.first {
@@ -35,12 +42,12 @@ final class KeybindingManager {
     func setKeybinding(_ keystroke: Keystroke, for action: Action) {
         deleteAllKeybindings(to: action)
         keybindMappings[keystroke.withoutUnwatedModifiers()] = action
-        postKeybindingsChangedNotification()
+        onKeybindingsChanged()
     }
     
     func removeKeybinding(forAction action: Action) {
         deleteAllKeybindings(to: action)
-        postKeybindingsChangedNotification()
+        onKeybindingsChanged()
     }
     
     private func deleteAllKeybindings(to action: Action) {
@@ -56,7 +63,8 @@ final class KeybindingManager {
         }
     }
     
-    private func postKeybindingsChangedNotification() {
+    private func onKeybindingsChanged() {
+        settingsStorageManager.setActionKeybindings(keybindMappings)
         NotificationCenter.default.post(name: .keybindingsChanged, object: nil)
     }
 }

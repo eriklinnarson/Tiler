@@ -54,7 +54,9 @@ class SettingsPageViewModel: ObservableObject {
     func didSelectAction(_ action: Action) {
         if action == selectedAction {
             selectedAction = nil
+            keybindingManager.keybindingRecordingInProgress = false
         } else {
+            keybindingManager.keybindingRecordingInProgress = true
             selectedAction = action
         }
     }

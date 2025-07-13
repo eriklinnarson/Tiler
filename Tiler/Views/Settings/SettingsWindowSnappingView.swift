@@ -30,7 +30,8 @@ struct SettingsWindowSnappingView: View {
                     action: cardModel.action,
                     keybindingDisplay: cardModel.keybindingDisplay,
                     isSelected: isSelected,
-                    onDidSelect: viewModel.didSelectAction(_:)
+                    onDidSelect: viewModel.didSelectAction(_:),
+                    onDidRemove: viewModel.didTapRemoveKeybinding(forAction:)
                 )
             }
         }

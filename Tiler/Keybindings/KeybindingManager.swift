@@ -43,6 +43,10 @@ final class KeybindingManager {
         postKeybindingsChangedNotification()
     }
     
+    func removeKeybinding(forAction action: Action) {
+        deleteAllKeybindings(to: action)
+    }
+    
     private func deleteAllKeybindings(to action: Action) {
         let keys = keybindMappings
             .filter {

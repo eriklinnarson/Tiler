@@ -12,6 +12,7 @@ struct KeybindingSettingsCard: View {
     let keybindingDisplay: String
     let isSelected: Bool
     let onDidSelect: (Action) -> Void
+    let onDidRemove: (Action) -> Void
     
     var body: some View {
         HStack(spacing: 7.5) {
@@ -47,7 +48,7 @@ struct KeybindingSettingsCard: View {
     
     private var removeKeybindingButton: some View {
         Button {
-            print("remove keybinding")
+            onDidRemove(action)
         } label: {
             Image(systemName: "x.circle.fill")
                 .font(.body)

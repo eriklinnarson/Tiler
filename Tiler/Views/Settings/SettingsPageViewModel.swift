@@ -59,6 +59,11 @@ class SettingsPageViewModel: ObservableObject {
         }
     }
     
+    func didTapRemoveKeybinding(forAction action: Action) {
+        keybindingManager.removeKeybinding(forAction: action)
+        selectedAction = nil
+    }
+    
     private func setupSubscribers() {
         keystrokeListener
             .$keystroke

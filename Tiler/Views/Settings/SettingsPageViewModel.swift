@@ -22,7 +22,7 @@ class SettingsPageViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    @Published private(set) var selectedAction: Action?
+    @Published private(set) var selectedActionForRecordKeybinding: Action?
     @Published private var keybindings: [Keystroke: Action] = [:]
     
     var keybindingCardModels: [KeybindingCardModel] {
@@ -52,22 +52,22 @@ class SettingsPageViewModel: ObservableObject {
     }
     
     func didSelectAction(_ action: Action) {
-        if action == selectedAction {
-            selectedAction = nil
+        if action == selectedActionForRecordKeybinding {
+            selectedActionForRecordKeybinding = nil
             keystrokeListener.setIgnoreKeystrokes(false)
         } else {
             keystrokeListener.setIgnoreKeystrokes(true)
-            selectedAction = action
+            selectedActionForRecordKeybinding = action
         }
     }
     
     func didTapRemoveKeybinding(forAction action: Action) {
         keybindingManager.removeKeybinding(forAction: action)
-        selectedAction = nil
+        selectedActionForRecordKeybinding = nil
     }
     
     func onViewDisappear() {
-        selectedAction = nil
+        selectedActionForRecordKeybinding = nil
         keystrokeListener.setIgnoreKeystrokes(false)
     }
     
@@ -97,11 +97,11 @@ class SettingsPageViewModel: ObservableObject {
     }
     
     private func didReceiveKeystroke(_ keystroke: Keystroke?) {
-        guard let keystroke, let selectedAction else {
+        guard let keystroke, let selectedActionForRecordKeybinding else {
             return
         }
         
-        keybindingManager.setKeybinding(keystroke, for: selectedAction)
+        keybindingManager.setKeybinding(keystroke, for: selectedActionForRecordKeybinding)
     }
 
     @objc func appWillResignActive(_ notification: Notification) {

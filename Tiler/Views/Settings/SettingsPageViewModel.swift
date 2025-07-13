@@ -51,6 +51,10 @@ class SettingsPageViewModel: ObservableObject {
         setupSubscribers()
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     func didSelectAction(_ action: Action) {
         if action == selectedAction {
             selectedAction = nil
@@ -64,6 +68,11 @@ class SettingsPageViewModel: ObservableObject {
     func didTapRemoveKeybinding(forAction action: Action) {
         keybindingManager.removeKeybinding(forAction: action)
         selectedAction = nil
+    }
+    
+    func onViewDisappear() {
+        selectedAction = nil
+        keybindingManager.keybindingRecordingInProgress = false
     }
     
     private func setupSubscribers() {
@@ -82,6 +91,13 @@ class SettingsPageViewModel: ObservableObject {
                 self?.keybindings = $0
             }
             .store(in: &cancellables)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appWillResignActive),
+            name: NSApplication.willResignActiveNotification,
+            object: nil
+        )
     }
     
     private func didReceiveKeystroke(_ keystroke: Keystroke?) {
@@ -90,5 +106,9 @@ class SettingsPageViewModel: ObservableObject {
         }
         
         keybindingManager.setKeybinding(keystroke, for: selectedAction)
+    }
+
+    @objc func appWillResignActive(_ notification: Notification) {
+        onViewDisappear()
     }
 }

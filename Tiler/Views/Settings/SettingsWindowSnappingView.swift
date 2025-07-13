@@ -38,5 +38,6 @@ struct SettingsWindowSnappingView: View {
         .padding()
         .frame(maxHeight: .infinity, alignment: .topLeading)
         .font(.title2)
+        .onDisappear(perform: viewModel.onViewDisappear)
     }
 }

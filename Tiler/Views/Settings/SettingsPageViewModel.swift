@@ -13,10 +13,6 @@ struct KeybindingCardModel: Identifiable {
     let keybinding: Keystroke?
     
     var id: String { action.id }
-    
-    var keybindingDisplay: String {
-        keybinding?.display ?? "-"
-    }
 }
 
 class SettingsPageViewModel: ObservableObject {

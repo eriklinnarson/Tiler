@@ -27,8 +27,7 @@ struct SettingsWindowSnappingView: View {
                 let isSelected = cardModel.action == viewModel.selectedAction
                 
                 KeybindingSettingsCard(
-                    action: cardModel.action,
-                    keybindingDisplay: cardModel.keybindingDisplay,
+                    model: cardModel,
                     isSelected: isSelected,
                     onDidSelect: viewModel.didSelectAction(_:),
                     onDidRemove: viewModel.didTapRemoveKeybinding(forAction:)

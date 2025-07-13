@@ -16,7 +16,6 @@ struct KeybindingCardModel: Identifiable {
 }
 
 class SettingsPageViewModel: ObservableObject {
-    private let actions: [Action]
     private let keybindingManager: KeybindingManager
     private let keystrokeListener: KeystrokeListener
     
@@ -25,22 +24,10 @@ class SettingsPageViewModel: ObservableObject {
     @Published private(set) var selectedActionForRecordKeybinding: Action?
     @Published private var keybindings: [Keystroke: Action] = [:]
     
-    var keybindingCardModels: [KeybindingCardModel] {
-        actions.map { action in
-            let keybinding = keybindings.first {
-                $0.value == action
-            }?.key
-            
-            return KeybindingCardModel(action: action, keybinding: keybinding)
-        }
-    }
-    
     init(
-        actions: [Action],
         keybindingManager: KeybindingManager,
         keystrokeListener: KeystrokeListener
     ) {
-        self.actions = actions
         self.keybindingManager = keybindingManager
         self.keystrokeListener = keystrokeListener
         
@@ -50,6 +37,15 @@ class SettingsPageViewModel: ObservableObject {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+    
+    func keybindingCardModel(forAction action: Action) -> KeybindingCardModel {
+        let keybinding = keybindings.first {
+            $0.value == action
+        }?.key
+        
+        return KeybindingCardModel(action: action, keybinding: keybinding)
+    }
+
     
     func didSelectAction(_ action: Action) {
         if action == selectedActionForRecordKeybinding {

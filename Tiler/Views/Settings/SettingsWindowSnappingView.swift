@@ -14,7 +14,6 @@ struct SettingsWindowSnappingView: View {
     init(keybindingManager: KeybindingManager, keystrokeListener: KeystrokeListener) {
         _viewModel = StateObject(
             wrappedValue: .init(
-                actions: ScreenArea.allCases.map { Action.placeWindowIn($0) },
                 keybindingManager: keybindingManager,
                 keystrokeListener: keystrokeListener
             )
@@ -23,7 +22,12 @@ struct SettingsWindowSnappingView: View {
     
     var body: some View {
         VStack(spacing: 10) {
-            ForEach(viewModel.keybindingCardModels) { cardModel in
+            let placeWindowActions = ScreenArea.allCases.map { Action.placeWindowIn($0) }
+            let cardModels = placeWindowActions.map {
+                viewModel.keybindingCardModel(forAction: $0)
+            }
+            
+            ForEach(cardModels) { cardModel in
                 let isSelected = cardModel.action == viewModel.selectedActionForRecordKeybinding
                 
                 KeybindingSettingsCard(

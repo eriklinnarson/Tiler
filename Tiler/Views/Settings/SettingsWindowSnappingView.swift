@@ -21,26 +21,27 @@ struct SettingsWindowSnappingView: View {
     }
     
     var body: some View {
-        VStack(spacing: 10) {
-            let placeWindowActions = ScreenArea.allCases.map { Action.placeWindowIn($0) }
-            let cardModels = placeWindowActions.map {
-                viewModel.keybindingCardModel(forAction: $0)
-            }
-            
-            ForEach(cardModels) { cardModel in
-                let isSelected = cardModel.action == viewModel.selectedActionForRecordKeybinding
-                
-                KeybindingSettingsCard(
-                    model: cardModel,
-                    isSelected: isSelected,
-                    onDidSelect: viewModel.didSelectAction(_:),
-                    onDidRemove: viewModel.didTapRemoveKeybinding(forAction:)
-                )
-            }
+        let placeWindowActions = ScreenArea.allCases.map { Action.placeWindowIn($0) }
+        let rowModels = placeWindowActions.map {
+            viewModel.rowModel(forAction: $0)
         }
-        .padding()
-        .frame(maxHeight: .infinity, alignment: .topLeading)
-        .font(.title2)
+        
+        ActionKeybindingListView(
+            models: rowModels,
+            rowViewBuilder: actionKeybindingRowBuilder(_:)
+        )
         .onDisappear(perform: viewModel.onViewDisappear)
+    }
+    
+    @ViewBuilder
+    func actionKeybindingRowBuilder(_ rowModel: ActionKeybindingRowModel) -> some View {
+        let isSelected = rowModel.action == viewModel.selectedActionForRecordKeybinding
+        
+        ActionKeybindingRowView(
+            model: rowModel,
+            isSelected: isSelected,
+            onDidSelect: viewModel.didSelectAction(_:),
+            onDidRemove: viewModel.didTapRemoveKeybinding(forAction:)
+        )
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-struct KeybindingCardModel: Identifiable {
+struct ActionKeybindingRowModel: Identifiable {
     let action: Action
     let keybinding: Keystroke?
     
@@ -38,12 +38,12 @@ class SettingsPageViewModel: ObservableObject {
         NotificationCenter.default.removeObserver(self)
     }
     
-    func keybindingCardModel(forAction action: Action) -> KeybindingCardModel {
+    func rowModel(forAction action: Action) -> ActionKeybindingRowModel {
         let keybinding = keybindings.first {
             $0.value == action
         }?.key
         
-        return KeybindingCardModel(action: action, keybinding: keybinding)
+        return ActionKeybindingRowModel(action: action, keybinding: keybinding)
     }
 
     

@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct KeybindingSettingsCard: View {
-    let model: KeybindingCardModel
+struct ActionKeybindingRowView: View {
+    let model: ActionKeybindingRowModel
     let isSelected: Bool
     let onDidSelect: (Action) -> Void
     let onDidRemove: (Action) -> Void

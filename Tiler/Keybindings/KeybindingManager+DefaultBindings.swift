@@ -9,7 +9,7 @@ import Foundation
 
 // TODO: Add remaining default keybindings
 extension KeybindingManager {
-    func defaultKeybindings() -> [Keystroke: Action] {
+    static func defaultKeybindings() -> [Keystroke: Action] {
         [
             // MARK: - Place window in area
             .init(

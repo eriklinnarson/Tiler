@@ -8,7 +8,13 @@
 import AppKit
 
 final class KeybindingManager {
-    lazy var keybindMappings: [Keystroke: Action] = defaultKeybindings()
+    
+    @Published
+    private(set) var keybindMappings: [Keystroke: Action]
+    
+    init() {
+        keybindMappings = Self.defaultKeybindings()
+    }
     
     func getAction(for keystroke: Keystroke) -> Action? {
         let matchingKeybinding = keybindMappings.keys.first {
@@ -36,6 +42,25 @@ final class KeybindingManager {
     }
     
     func setKeybinding(_ keystroke: Keystroke, for action: Action) {
+        deleteAllKeybindings(to: action)
         keybindMappings[keystroke] = action
+        postKeybindingsChangedNotification()
+    }
+    
+    private func deleteAllKeybindings(to action: Action) {
+        let keys = keybindMappings
+            .filter {
+                $0.value == action
+            }.map {
+                $0.key
+            }
+        
+        keys.forEach {
+            keybindMappings.removeValue(forKey: $0)
+        }
+    }
+    
+    private func postKeybindingsChangedNotification() {
+        NotificationCenter.default.post(name: .keybindingsChanged, object: nil)
     }
 }

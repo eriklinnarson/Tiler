@@ -8,16 +8,43 @@
 import SwiftUI
 import Combine
 
+struct KeybindingCardModel: Identifiable {
+    let action: Action
+    let keybinding: Keystroke?
+    
+    var id: String { action.id }
+    
+    var keybindingDisplay: String {
+        keybinding?.display ?? "-"
+    }
+}
+
 class SettingsPageViewModel: ObservableObject {
+    let actions: [Action]
     let keybindingManager: KeybindingManager
     let keystrokeListener: KeystrokeListener
     
     @Published private(set) var selectedAction: Action?
-    @Published private(set) var mostRecentKeystroke: Keystroke?
+    @Published private var keybindings: [Keystroke: Action] = [:]
+    
+    var keybindingCardModels: [KeybindingCardModel] {
+        actions.map { action in
+            let keybinding = keybindings.first {
+                $0.value == action
+            }?.key
+            
+            return KeybindingCardModel(action: action, keybinding: keybinding)
+        }
+    }
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(keybindingManager: KeybindingManager, keystrokeListener: KeystrokeListener) {
+    init(
+        actions: [Action],
+        keybindingManager: KeybindingManager,
+        keystrokeListener: KeystrokeListener
+    ) {
+        self.actions = actions
         self.keybindingManager = keybindingManager
         self.keystrokeListener = keystrokeListener
         
@@ -28,22 +55,7 @@ class SettingsPageViewModel: ObservableObject {
         if action == selectedAction {
             selectedAction = nil
         } else {
-            mostRecentKeystroke = nil
             selectedAction = action
-        }
-    }
-    
-    func keybinding(for screenArea: ScreenArea) -> Keystroke? {
-        keybindingManager.getKeybinding(for: .placeWindowIn(screenArea))
-    }
-    
-    func keybindingDisplay(for action: Action) -> String {
-        if let mostRecentKeystroke, selectedAction == action {
-            return mostRecentKeystroke.display
-        } else if let keybinding = keybindingManager.getKeybinding(for: action) {
-            return keybinding.display
-        } else {
-            return "Not bound"
         }
     }
     
@@ -55,16 +67,18 @@ class SettingsPageViewModel: ObservableObject {
                 self?.didReceiveKeystroke($0)
             }
             .store(in: &cancellables)
+        
+        keybindingManager
+            .$keybindMappings
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.keybindings = $0
+            }
+            .store(in: &cancellables)
     }
     
     private func didReceiveKeystroke(_ keystroke: Keystroke?) {
-        guard let keystroke else {
-            return
-        }
-        
-        mostRecentKeystroke = keystroke
-        
-        guard let selectedAction else {
+        guard let keystroke, let selectedAction else {
             return
         }
         

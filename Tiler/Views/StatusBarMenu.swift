@@ -25,6 +25,30 @@ final class StatusBarMenu: NSMenu {
         self.keystrokeListener = keystrokeListener
         self.windowController = NSWindowController()
         
+        setupMenuButtons()
+        setupNotificationObserver()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func setupNotificationObserver() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didReceiveKeybindingsChangedNotification),
+            name: .keybindingsChanged,
+            object: nil
+        )
+    }
+    
+    @objc private func didReceiveKeybindingsChangedNotification() {
+        setupMenuButtons()
+    }
+    
+    private func setupMenuButtons() {
+        removeAllItems()
+        
         ScreenArea.allCases.forEach {
             let menuItem = menuBarItem(for: .placeWindowIn($0))
             addItem(menuItem)

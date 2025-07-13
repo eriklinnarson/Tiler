@@ -8,10 +8,21 @@
 import AppKit
 import SwiftUI
 
-enum Action: Equatable {
+enum Action: Equatable, Identifiable {
     case placeWindowIn(ScreenArea)
     case shrinkWindow(Direction)
     case expandWindow(Direction)
+    
+    var id: String {
+        switch self {
+        case .placeWindowIn(let screenArea):
+            "placeWindowIn\(screenArea.rawValue)"
+        case .shrinkWindow(let direction):
+            "shrinkWindow\(direction.rawValue)"
+        case .expandWindow(let direction):
+            "expandWindow\(direction.rawValue)"
+        }
+    }
     
     var localizedName: String {
         switch self {

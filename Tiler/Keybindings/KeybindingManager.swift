@@ -6,6 +6,11 @@
 //
 
 import AppKit
+import OSLog
+
+private extension Logger {
+    static let keybindingManager = Logger(subsystem: subsystem, category: "keybindingManager")
+}
 
 final class KeybindingManager {
     
@@ -40,8 +45,10 @@ final class KeybindingManager {
     }
     
     func setKeybinding(_ keystroke: Keystroke, for action: Action) {
+        let newKeybinding = keystroke.withoutUnwatedModifiers()
+        Logger.keybindingManager.info("Updating keybinding: \(newKeybinding.display), action: \(action.id)")
         deleteAllKeybindings(to: action)
-        keybindMappings[keystroke.withoutUnwatedModifiers()] = action
+        keybindMappings[newKeybinding] = action
         onKeybindingsChanged()
     }
     
@@ -64,6 +71,7 @@ final class KeybindingManager {
     }
     
     private func onKeybindingsChanged() {
+        Logger.keybindingManager.info("Sending notification: \(Notification.Name.keybindingsChanged.rawValue)")
         settingsStorageManager.setActionKeybindings(keybindMappings)
         NotificationCenter.default.post(name: .keybindingsChanged, object: nil)
     }

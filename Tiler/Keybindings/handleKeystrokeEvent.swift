@@ -6,6 +6,11 @@
 //
 
 import AppKit
+import OSLog
+
+private extension Logger {
+    static let keyStrokeEvent = Logger(subsystem: subsystem, category: "keyStrokeEvent")
+}
 
 func handleKeystrokeEvent(
     proxy: CGEventTapProxy,
@@ -19,7 +24,7 @@ func handleKeystrokeEvent(
     }
     
     guard let userInfo else {
-        assertionFailure("userInfo not set")
+        Logger.keyStrokeEvent.error("userInfo not set")
         return Unmanaged.passUnretained(cgEvent)
     }
     
@@ -38,6 +43,7 @@ func handleKeystrokeEvent(
         // However, if the user is recording a keybinding in settings, we still consume the event.
         // This removes the blip-sound when no app responds to the event.
         if ignoreKeystrokes {
+            Logger.keyStrokeEvent.info("Keystroke not keybound, but recording in progress. Consuming event: \(keystroke.display)")
             return nil
         } else {
             return Unmanaged.passUnretained(cgEvent)
@@ -45,6 +51,7 @@ func handleKeystrokeEvent(
     }
     
     if ignoreKeystrokes == false {
+        Logger.keyStrokeEvent.info("Keybinding found, sending to windowManager. Event: \(keystroke.display)")
         appDelegate.windowManager.execute(keyboundAction)
     }
     

@@ -7,6 +7,11 @@
 
 import ApplicationServices
 import AppKit
+import OSLog
+
+private extension Logger {
+    static let windowManager = Logger(subsystem: subsystem, category: "windowManager")
+}
 
 final class WindowManager {
     
@@ -32,12 +37,10 @@ final class WindowManager {
     
     private func placeFrontmostWindow(in screenArea: ScreenArea) {
         guard let window = getFrontmostWindow() else {
-            // TODO: Log no window to move
             return
         }
         
         guard let screenSize = getScreenSize() else {
-            // TODO: log error
             return
         }
         
@@ -53,7 +56,6 @@ final class WindowManager {
     
     private func shrinkFrontmostWindowTowards(_ shrinkDirection: Direction) {
         guard let window = getFrontmostWindow() else {
-            // TODO: Log no window to move
             return
         }
         
@@ -79,7 +81,6 @@ final class WindowManager {
     
     private func expandFrontmostWindowTowards(_ expandDirection: Direction) {
         guard let window = getFrontmostWindow() else {
-            // TODO: Log no window to move
             return
         }
         
@@ -107,7 +108,7 @@ final class WindowManager {
         let frontmostApp = NSWorkspace.shared.frontmostApplication
         
         guard let pid = frontmostApp?.processIdentifier else {
-            assertionFailure("Something went wrong, this should probably be logged.")
+            Logger.windowManager.error("Failed to get PID for frontmost app")
             return nil
         }
         
@@ -130,12 +131,10 @@ final class WindowManager {
     
     private func getWindowPlacement(of window: AXUIElement) -> WindowPlacement? {
         guard let currentPosition = getCurrentPosition(of: window) else {
-            assertionFailure("Something went wrong, this should probably be logged.")
             return nil
         }
         
         guard let currentSize = getCurrentSize(of: window) else {
-            assertionFailure("Something went wrong, this should probably be logged.")
             return nil
         }
         
@@ -191,6 +190,7 @@ final class WindowManager {
         )
         
         guard result == .success, let sizeRef else {
+            Logger.windowManager.error("Failed to get current size of window")
             return nil
         }
         
@@ -209,6 +209,7 @@ final class WindowManager {
         )
         
         guard result == .success, let positionRef else {
+            Logger.windowManager.error("Failed to get current position of window")
             return nil
         }
         
@@ -220,7 +221,7 @@ final class WindowManager {
     private func setSize(_ windowSize: CGSize, to window: AXUIElement) {
         var windowSize = windowSize
         guard let axValueSize = AXValueCreate(.cgSize, &windowSize) else {
-            assertionFailure("Something went wrong, this should probably be logged.")
+            Logger.windowManager.error("Failed to set size of window")
             return
         }
         AXUIElementSetAttributeValue(window, kAXSizeAttribute as CFString, axValueSize)
@@ -229,13 +230,17 @@ final class WindowManager {
     private func setPosition(_ windowPosition: CGPoint, to window: AXUIElement) {
         var windowPosition = windowPosition
         guard let axValuePosition = AXValueCreate(.cgPoint, &windowPosition) else {
-            assertionFailure("Something went wrong, this should probably be logged.")
+            Logger.windowManager.error("Failed to set position of window")
             return
         }
         AXUIElementSetAttributeValue(window, kAXPositionAttribute as CFString, axValuePosition)
     }
     
     private func getScreenSize() -> NSRect? {
-        NSScreen.main?.frame
+        let screenSize = NSScreen.main?.frame
+        if screenSize == nil {
+            Logger.windowManager.error("Failed to get screen size")
+        }
+        return screenSize
     }
 }

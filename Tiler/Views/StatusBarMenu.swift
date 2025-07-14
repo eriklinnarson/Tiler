@@ -6,7 +6,12 @@
 //
 
 import AppKit
+import OSLog
 import SwiftUI
+
+private extension Logger {
+    static let statusBarMenu = Logger(subsystem: subsystem, category: "statusBarMenu")
+}
 
 final class StatusBarMenu: NSMenu {
     
@@ -43,6 +48,7 @@ final class StatusBarMenu: NSMenu {
     }
     
     @objc private func didReceiveKeybindingsChangedNotification() {
+        Logger.statusBarMenu.info("Keybindings changed, updating status menu")
         setupMenuButtons()
     }
     
@@ -140,7 +146,7 @@ final class StatusBarMenu: NSMenu {
     
     @objc private func openPreferences() {
         guard let windowController, let keystrokeListener, let keybindingManager else {
-            assertionFailure("WindowController not setup.")
+            Logger.statusBarMenu.error("Improper setup")
             return
         }
         

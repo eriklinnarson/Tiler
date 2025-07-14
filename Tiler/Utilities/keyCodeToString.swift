@@ -6,6 +6,11 @@
 //
 
 import Carbon
+import OSLog
+
+extension Logger {
+    static let keyCodeToString = Logger(subsystem: subsystem, category: "keyCodeToString")
+}
 
 func keyCodeToString(_ keyCode: CGKeyCode) -> String {
     // TODO: Jag är rätt säker på att `.takeRetainedValue` är rätt här, om man följer "Create/Copy"-regeln
@@ -31,7 +36,9 @@ func keyCodeToString(_ keyCode: CGKeyCode) -> String {
                                 &actualStringLength,
                                 &unicodeString)
     
-    // TODO: Log some errors here
+    if status != 0 {
+        Logger.keyCodeToString.error("Failed to convert keyCode to string. KeyCode \(keyCode), status: \(status)")
+    }
     
     return NSString(characters: unicodeString, length: actualStringLength) as String
 }

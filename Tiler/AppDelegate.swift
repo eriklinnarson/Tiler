@@ -59,7 +59,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             callback: handleKeystrokeEvent,
             userInfo: pointerToSelf
         ) else {
-            // TODO: Log error
             return
         }
         

@@ -7,6 +7,11 @@
 
 import SwiftUI
 import Combine
+import OSLog
+
+private extension Logger {
+    static let settingsPageViewModel = Logger(subsystem: subsystem, category: "settingsPageViewModel")
+}
 
 struct ActionKeybindingRowModel: Identifiable {
     let action: Action
@@ -49,8 +54,10 @@ class SettingsPageViewModel: ObservableObject {
     
     func didSelectAction(_ action: Action) {
         if action == selectedActionForRecordKeybinding {
+            Logger.settingsPageViewModel.info("Action deselected for keybinding recording: \(action.id)")
             disableKeybindingRecording()
         } else {
+            Logger.settingsPageViewModel.info("Action selected for keybinding recording: \(action.id)")
             keystrokeListener.setIgnoreKeystrokes(true)
             selectedActionForRecordKeybinding = action
         }
@@ -62,6 +69,7 @@ class SettingsPageViewModel: ObservableObject {
     }
     
     func didTapRemoveKeybinding(forAction action: Action) {
+        Logger.settingsPageViewModel.info("Button for remove action tapped: \(action.id)")
         keybindingManager.removeKeybinding(forAction: action)
         selectedActionForRecordKeybinding = nil
     }

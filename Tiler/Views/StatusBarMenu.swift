@@ -127,21 +127,27 @@ final class StatusBarMenu: NSMenu {
         guard let screenAreaTapped = ScreenArea(rawValue: sender.tag) else {
             return
         }
-        windowManager?.execute(.placeWindowIn(screenAreaTapped))
+        let action = Action.placeWindowIn(screenAreaTapped)
+        Logger.statusBarMenu.info("Action called from menu: \(action.id)")
+        windowManager?.execute(action)
     }
     
     @objc private func didTapMenuItemForShrinkDirection(sender: NSMenuItem) {
         guard let shrinkDirectionTapped = Direction(rawValue: sender.tag) else {
             return
         }
-        windowManager?.execute(.shrinkWindow(shrinkDirectionTapped))
+        let action = Action.shrinkWindow(shrinkDirectionTapped)
+        Logger.statusBarMenu.info("Action called from menu: \(action.id)")
+        windowManager?.execute(action)
     }
     
     @objc private func didTapMenuItemForExpandDirection(sender: NSMenuItem) {
         guard let expandDirectionTapped = Direction(rawValue: sender.tag) else {
             return
         }
-        windowManager?.execute(.expandWindow(expandDirectionTapped))
+        let action = Action.expandWindow(expandDirectionTapped)
+        Logger.statusBarMenu.info("Action called from menu: \(action.id)")
+        windowManager?.execute(action)
     }
     
     @objc private func openPreferences() {

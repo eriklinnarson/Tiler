@@ -51,7 +51,7 @@ func handleKeystrokeEvent(
     }
     
     if ignoreKeystrokes == false {
-        Logger.keyStrokeEvent.info("Keybinding found, sending to windowManager. Event: \(keystroke.display)")
+        Logger.keyStrokeEvent.info("Action called through keybinding (\(keystroke.display)): \(keyboundAction.id)")
         appDelegate.windowManager.execute(keyboundAction)
     }
     

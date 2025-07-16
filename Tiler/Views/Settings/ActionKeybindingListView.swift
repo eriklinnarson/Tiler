@@ -17,8 +17,5 @@ struct ActionKeybindingListView<RowModel: Identifiable, RowView: View>: View {
                 rowViewBuilder(rowModel)
             }
         }
-        .padding()
-        .frame(alignment: .topLeading)
-        .font(.title2)
     }
 }

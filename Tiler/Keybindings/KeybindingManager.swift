@@ -57,6 +57,12 @@ final class KeybindingManager {
         onKeybindingsChanged()
     }
     
+    func restoreKeybindingsToDefault() {
+        Logger.keybindingManager.info("Restoring to default keybindings")
+        keybindMappings = Self.defaultKeybindings()
+        onKeybindingsChanged()
+    }
+    
     private func deleteAllKeybindings(to action: Action) {
         let keys = keybindMappings
             .filter {

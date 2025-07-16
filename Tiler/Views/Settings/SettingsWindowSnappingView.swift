@@ -26,13 +26,14 @@ struct SettingsWindowSnappingView: View {
             viewModel.rowModel(forAction: $0)
         }
         
-        ScrollView {
+        VStack {
             ActionKeybindingListView(
                 models: rowModels,
                 rowViewBuilder: actionKeybindingRowBuilder(_:)
             )
             .onDisappear(perform: viewModel.onViewDisappear)
         }
+        .settingsPageStyling()
     }
     
     @ViewBuilder

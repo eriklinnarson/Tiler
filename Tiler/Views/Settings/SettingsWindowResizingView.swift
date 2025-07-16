@@ -21,12 +21,14 @@ struct SettingsWindowResizingView: View {
     }
     
     var body: some View {
-        ScrollView {
+        VStack {
             shrinkActionsList
             Divider()
+                .padding(.vertical)
             expandActionsList
         }
         .onDisappear(perform: viewModel.onViewDisappear)
+        .settingsPageStyling()
     }
     
     @ViewBuilder

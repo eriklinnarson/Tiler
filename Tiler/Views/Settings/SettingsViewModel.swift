@@ -11,13 +11,14 @@ import SwiftUI
 final class SettingsViewModel: ObservableObject {
     
     enum SettingsTab: String, CaseIterable, Identifiable {
+        case general = "General"
         case windowSnapping = "Window Snapping"
         case windowResizing = "Window Resizing"
         
         var id: Self { self }
     }
     
-    @Published var selectedTab: SettingsTab = .windowSnapping
+    @Published var selectedTab: SettingsTab = .general
     
     let keystrokeListener: KeystrokeListener
     let keybindingManager: KeybindingManager

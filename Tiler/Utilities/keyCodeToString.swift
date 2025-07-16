@@ -8,7 +8,7 @@
 import Carbon
 import OSLog
 
-extension Logger {
+private extension Logger {
     static let keyCodeToString = Logger(subsystem: subsystem, category: "keyCodeToString")
 }
 

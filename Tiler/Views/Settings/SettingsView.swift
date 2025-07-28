@@ -37,6 +37,19 @@ struct SettingsView: View {
                 Text($0.rawValue)
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            VStack {
+                if let appVersionDisplay = viewModel.appVersionDisplay {
+                    Text("Version \(appVersionDisplay)")
+                }
+#if DEBUG
+                if let buildNumberDisplay = viewModel.buildNumberDisplay {
+                    Text("Build number: \(buildNumberDisplay)")
+                }
+#endif
+            }
+            .padding(.bottom, 3)
+        }
     }
     
     @ViewBuilder

@@ -20,6 +20,14 @@ final class SettingsViewModel: ObservableObject {
     
     @Published var selectedTab: SettingsTab = .general
     
+    var appVersionDisplay: String? {
+        Bundle.main.appVersionDisplay
+    }
+    
+    var buildNumberDisplay: String? {
+        Bundle.main.buildNumberDisplay
+    }
+    
     let keystrokeListener: KeystrokeListener
     let keybindingManager: KeybindingManager
     

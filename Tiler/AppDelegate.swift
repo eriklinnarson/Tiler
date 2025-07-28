@@ -6,6 +6,11 @@
 //
 
 import AppKit
+import OSLog
+
+private extension Logger {
+    static let appDelegate = Logger(subsystem: subsystem, category: "appDelegate")
+}
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
@@ -36,6 +41,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             accessibilityDescription: "circle"
         ) // TODO: Fix menu bar image
         
+        logAppStart()
+        
         let statusBarMenu = StatusBarMenu()
         statusBarMenu.setup(
             windowManager: windowManager,
@@ -45,6 +52,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarItem.menu = statusBarMenu
         
         setupKeystrokeListener()
+    }
+    
+    private func logAppStart() {
+        let appVersion = Bundle.main.appVersionDisplay ?? ""
+        let buildNumber = Bundle.main.buildNumberDisplay ?? ""
+        Logger.appDelegate.info("App start, version: \(appVersion), build number: \(buildNumber)")
     }
     
     private func setupKeystrokeListener() {

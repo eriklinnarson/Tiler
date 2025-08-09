@@ -28,11 +28,11 @@ final class SettingsViewModel: ObservableObject {
         Bundle.main.buildNumberDisplay
     }
     
-    let keystrokeListener: KeystrokeListener
+    let keystrokeManager: KeystrokeManager
     let keybindingManager: KeybindingManager
     
-    init(keystrokeListener: KeystrokeListener, keybindingManager: KeybindingManager) {
-        self.keystrokeListener = keystrokeListener
+    init(keystrokeManager: KeystrokeManager, keybindingManager: KeybindingManager) {
+        self.keystrokeManager = keystrokeManager
         self.keybindingManager = keybindingManager
     }
 }

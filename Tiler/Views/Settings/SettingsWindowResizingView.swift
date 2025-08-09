@@ -11,11 +11,11 @@ struct SettingsWindowResizingView: View {
     
     @StateObject private var viewModel: SettingsPageViewModel
     
-    init(keybindingManager: KeybindingManager, keystrokeListener: KeystrokeListener) {
+    init(keybindingManager: KeybindingManager, keystrokeManager: KeystrokeManager) {
         _viewModel = StateObject(
             wrappedValue: .init(
                 keybindingManager: keybindingManager,
-                keystrokeListener: keystrokeListener
+                keystrokeManager: keystrokeManager
             )
         )
     }

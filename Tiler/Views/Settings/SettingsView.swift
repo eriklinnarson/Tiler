@@ -11,10 +11,10 @@ struct SettingsView: View {
     
     @StateObject private var viewModel: SettingsViewModel
     
-    init(keystrokeListener: KeystrokeListener, keybindingManager: KeybindingManager) {
+    init(keystrokeManager: KeystrokeManager, keybindingManager: KeybindingManager) {
         self._viewModel = StateObject(
             wrappedValue: SettingsViewModel(
-                keystrokeListener: keystrokeListener,
+                keystrokeManager: keystrokeManager,
                 keybindingManager: keybindingManager
             )
         )
@@ -62,12 +62,12 @@ struct SettingsView: View {
         case .windowSnapping:
             SettingsWindowSnappingView(
                 keybindingManager: viewModel.keybindingManager,
-                keystrokeListener: viewModel.keystrokeListener
+                keystrokeManager: viewModel.keystrokeManager
             )
         case .windowResizing:
             SettingsWindowResizingView(
                 keybindingManager: viewModel.keybindingManager,
-                keystrokeListener: viewModel.keystrokeListener
+                keystrokeManager: viewModel.keystrokeManager
             )
         }
     }

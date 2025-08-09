@@ -1,5 +1,5 @@
 //
-//  KeystrokeListener.swift
+//  KeystrokeManager.swift
 //  Tiler
 //
 //  Created by Erik Linnarson on 2025-07-05.
@@ -7,14 +7,14 @@
 
 import Foundation
 
-final class KeystrokeListener {
-    @Published private(set) var keystroke: Keystroke? = nil
+final class KeystrokeManager {
+    @Published private(set) var mostRecentKeystroke: Keystroke? = nil
     
     private var ignoreKeystrokes = false
     private let lock = NSLock()
     
     func keystrokeWasCalled(_ keystroke: Keystroke) {
-        self.keystroke = keystroke
+        self.mostRecentKeystroke = keystroke
     }
     
     func getIgnoreKeystrokes() -> Bool {

@@ -34,9 +34,9 @@ func handleKeystrokeEvent(
     let modifiers = nsEvent.modifierFlags.intersection(.deviceIndependentFlagsMask)
     let keystroke = Keystroke(keyCode: keyCode, modifiers: modifiers)
     
-    appDelegate.keystrokeListener.keystrokeWasCalled(keystroke)
+    appDelegate.keystrokeManager.keystrokeWasCalled(keystroke)
     
-    let ignoreKeystrokes = appDelegate.keystrokeListener.getIgnoreKeystrokes()
+    let ignoreKeystrokes = appDelegate.keystrokeManager.getIgnoreKeystrokes()
     
     guard let keyboundAction = appDelegate.keybindingManager.getAction(for: keystroke) else {
         // Action was not keybound, let the event pass through.

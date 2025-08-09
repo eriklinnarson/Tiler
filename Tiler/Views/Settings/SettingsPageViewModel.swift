@@ -22,7 +22,7 @@ struct ActionKeybindingRowModel: Identifiable {
 
 class SettingsPageViewModel: ObservableObject {
     private let keybindingManager: KeybindingManager
-    private let keystrokeListener: KeystrokeListener
+    private let keystrokeManager: KeystrokeManager
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -31,10 +31,10 @@ class SettingsPageViewModel: ObservableObject {
     
     init(
         keybindingManager: KeybindingManager,
-        keystrokeListener: KeystrokeListener
+        keystrokeManager: KeystrokeManager
     ) {
         self.keybindingManager = keybindingManager
-        self.keystrokeListener = keystrokeListener
+        self.keystrokeManager = keystrokeManager
         
         setupSubscribers()
     }
@@ -58,14 +58,14 @@ class SettingsPageViewModel: ObservableObject {
             disableKeybindingRecording()
         } else {
             Logger.settingsPageViewModel.info("Action selected for keybinding recording: \(action.id)")
-            keystrokeListener.setIgnoreKeystrokes(true)
+            keystrokeManager.setIgnoreKeystrokes(true)
             selectedActionForRecordKeybinding = action
         }
     }
     
     func disableKeybindingRecording() {
         selectedActionForRecordKeybinding = nil
-        keystrokeListener.setIgnoreKeystrokes(false)
+        keystrokeManager.setIgnoreKeystrokes(false)
     }
     
     func didTapRemoveKeybinding(forAction action: Action) {
@@ -76,12 +76,12 @@ class SettingsPageViewModel: ObservableObject {
     
     func onViewDisappear() {
         selectedActionForRecordKeybinding = nil
-        keystrokeListener.setIgnoreKeystrokes(false)
+        keystrokeManager.setIgnoreKeystrokes(false)
     }
     
     private func setupSubscribers() {
-        keystrokeListener
-            .$keystroke
+        keystrokeManager
+            .$mostRecentKeystroke
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 self?.didReceiveKeystroke($0)

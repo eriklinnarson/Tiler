@@ -14,7 +14,6 @@ private extension Logger {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-    var keybindingEventTap: CFMachPort?
     
     let windowManager: WindowManager
     let settingsStorageManager: SettingsStorageManager
@@ -24,12 +23,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     override init() {
         let windowManager = WindowManager()
         let settingsStorageManager = SettingsStorageManager(userDefaults: .standard)
-        let keybindMappings = KeybindingManager(settingsStorageManager: settingsStorageManager)
-        let keystrokeManager = KeystrokeManager()
+        let keybindingManager = KeybindingManager(settingsStorageManager: settingsStorageManager)
+        let keystrokeManager = KeystrokeManager(keybindingManager: keybindingManager, windowManager: windowManager)
         
         self.windowManager = windowManager
         self.settingsStorageManager = settingsStorageManager
-        self.keybindingManager = keybindMappings
+        self.keybindingManager = keybindingManager
         self.keystrokeManager = keystrokeManager
         
         super.init()
@@ -50,34 +49,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             keystrokeManager: keystrokeManager
         )
         statusBarItem.menu = statusBarMenu
-        
-        setupKeystrokeListener()
     }
     
     private func logAppStart() {
         let appVersion = Bundle.main.appVersionDisplay ?? ""
         let buildNumber = Bundle.main.buildNumberDisplay ?? ""
         Logger.appDelegate.info("App start, version: \(appVersion), build number: \(buildNumber)")
-    }
-    
-    private func setupKeystrokeListener() {
-        let pointerToSelf = Unmanaged.passUnretained(self).toOpaque()
-        let eventMask = (1 << CGEventType.keyDown.rawValue)
-        
-        guard let tap = CGEvent.tapCreate(
-            tap: .cgSessionEventTap,
-            place: .headInsertEventTap,
-            options: .defaultTap,
-            eventsOfInterest: CGEventMask(eventMask),
-            callback: handleKeystrokeEvent,
-            userInfo: pointerToSelf
-        ) else {
-            return
-        }
-        
-        keybindingEventTap = tap
-        let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
-        CFRunLoopAddSource(CFRunLoopGetMain(), runLoopSource, .commonModes)
-        CGEvent.tapEnable(tap: tap, enable: true)
     }
 }

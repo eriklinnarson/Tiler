@@ -28,17 +28,17 @@ func handleKeystrokeEvent(
         return Unmanaged.passUnretained(cgEvent)
     }
     
-    let appDelegate = Unmanaged<AppDelegate>.fromOpaque(userInfo).takeUnretainedValue()
+    let keystrokeManager = Unmanaged<KeystrokeManager>.fromOpaque(userInfo).takeUnretainedValue()
     
     let keyCode = nsEvent.keyCode
     let modifiers = nsEvent.modifierFlags.intersection(.deviceIndependentFlagsMask)
     let keystroke = Keystroke(keyCode: keyCode, modifiers: modifiers)
     
-    appDelegate.keystrokeManager.keystrokeWasCalled(keystroke)
+    keystrokeManager.keystrokeWasCalled(keystroke)
     
-    let ignoreKeystrokes = appDelegate.keystrokeManager.getIgnoreKeystrokes()
+    let ignoreKeystrokes = keystrokeManager.getIgnoreKeystrokes()
     
-    guard let keyboundAction = appDelegate.keybindingManager.getAction(for: keystroke) else {
+    guard let keyboundAction = keystrokeManager.keybindingManager.getAction(for: keystroke) else {
         // Action was not keybound, let the event pass through.
         // However, if the user is recording a keybinding in settings, we still consume the event.
         // This removes the blip-sound when no app responds to the event.
@@ -52,7 +52,7 @@ func handleKeystrokeEvent(
     
     if ignoreKeystrokes == false {
         Logger.keyStrokeEvent.info("Action called through keybinding (\(keystroke.display)): \(keyboundAction.id)")
-        appDelegate.windowManager.execute(keyboundAction)
+        keystrokeManager.windowManager.execute(keyboundAction)
     }
     
     // Consume the tap event

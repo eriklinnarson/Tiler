@@ -21,6 +21,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let keystrokeManager: KeystrokeManager
     
     override init() {
+        Self.logAppStart()
+        
         let windowManager = WindowManager()
         let settingsStorageManager = SettingsStorageManager(userDefaults: .standard)
         let keybindingManager = KeybindingManager(settingsStorageManager: settingsStorageManager)
@@ -40,8 +42,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             accessibilityDescription: "circle"
         ) // TODO: Fix menu bar image
         
-        logAppStart()
-        
         let statusBarMenu = StatusBarMenu()
         statusBarMenu.setup(
             windowManager: windowManager,
@@ -51,7 +51,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarItem.menu = statusBarMenu
     }
     
-    private func logAppStart() {
+    private static func logAppStart() {
         let appVersion = Bundle.main.appVersionDisplay ?? ""
         let buildNumber = Bundle.main.buildNumberDisplay ?? ""
         Logger.appDelegate.info("App start, version: \(appVersion), build number: \(buildNumber)")

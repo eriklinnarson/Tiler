@@ -52,11 +52,11 @@ final class StatusBarMenu: NSMenu {
             .removeDuplicates()
             .compactMap { $0 }
             .receive(on: DispatchQueue.main)
-            .sink { accessibilityPermissionsGranted in
+            .sink { [weak self] accessibilityPermissionsGranted in
                 if accessibilityPermissionsGranted {
-                    // TODO: setup menu items
+                    self?.setupMenuButtons()
                 } else {
-                    // TODO: show prompt for accessibility permissions
+                    self?.setupMenuForMissingAccessibilitySettings()
                 }
             }
             .store(in: &cancellables)
@@ -101,6 +101,24 @@ final class StatusBarMenu: NSMenu {
         addItem(NSMenuItem.separator())
         
         addItem(menuBarPreferences())
+        addItem(menuBarQuit())
+    }
+    
+    private func setupMenuForMissingAccessibilitySettings() {
+        removeAllItems()
+        
+        let titleItem = NSMenuItem()
+        titleItem.title = "Tiler does not have the permissions required to tile your windows."
+        
+        let settingsButtonItem = NSMenuItem()
+        settingsButtonItem.title = "Open settings"
+        settingsButtonItem.action = #selector(openSystemSettings)
+        settingsButtonItem.target = self
+        let image = NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: "TODO")
+        settingsButtonItem.image = image
+        
+        addItem(titleItem)
+        addItem(settingsButtonItem)
         addItem(menuBarQuit())
     }
     
@@ -196,7 +214,17 @@ final class StatusBarMenu: NSMenu {
         NSApp.activate(ignoringOtherApps: true)
     }
     
+    @objc private func openSystemSettings() {
+        guard let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") else {
+            Logger.statusBarMenu.error("Error when setting up deeplink to system settings.")
+            return
+        }
+        
+        NSWorkspace.shared.open(url)
+    }
+    
     @objc private func quitApp() {
+        Logger.statusBarMenu.info("Quit app button pressed, closing down...")
         NSApplication.shared.terminate(self)
     }
 }

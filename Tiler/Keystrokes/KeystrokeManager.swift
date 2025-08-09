@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import Combine
 import OSLog
 
 final class KeystrokeManager {
@@ -18,11 +19,14 @@ final class KeystrokeManager {
     private let lock = NSLock()
     private var keybindingEventTap: CFMachPort?
     
+    private var cancellables = Set<AnyCancellable>()
+    
     init(keybindingManager: KeybindingManager, windowManager: WindowManager) {
         self.keybindingManager = keybindingManager
         self.windowManager = windowManager
         
         setupKeystrokeListener()
+        setupAccessibilitySettingObserver()
     }
     
     func keystrokeWasCalled(_ keystroke: Keystroke) {
@@ -42,6 +46,13 @@ final class KeystrokeManager {
     }
     
     private func setupKeystrokeListener() {
+        guard keybindingEventTap == nil else {
+            /// Already setup
+            return
+        }
+        
+        Logger.keystrokeMangager.info("Setting up keystrokeListener")
+        
         let pointerToSelf = Unmanaged.passUnretained(self).toOpaque()
         let eventMask = (1 << CGEventType.keyDown.rawValue)
         
@@ -61,6 +72,22 @@ final class KeystrokeManager {
         let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
         CFRunLoopAddSource(CFRunLoopGetMain(), runLoopSource, .commonModes)
         CGEvent.tapEnable(tap: tap, enable: true)
+    }
+    
+    private func setupAccessibilitySettingObserver() {
+        PermissionsManager.shared
+            .$accessibilityPermissionsGranted
+            .removeDuplicates()
+            .compactMap { $0 }
+            .sink { [weak self] isPermissionsGranted in
+                if isPermissionsGranted {
+                    /// If accessibility privileges were just granted, we need to setupKeystrokeListener
+                    self?.setupKeystrokeListener()
+                } else {
+                    self?.keybindingEventTap = nil
+                }
+            }
+            .store(in: &cancellables)
     }
 }
 

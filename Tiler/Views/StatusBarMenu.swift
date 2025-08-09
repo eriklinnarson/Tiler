@@ -6,6 +6,7 @@
 //
 
 import AppKit
+import Combine
 import OSLog
 import SwiftUI
 
@@ -20,6 +21,8 @@ final class StatusBarMenu: NSMenu {
     private var keystrokeManager: KeystrokeManager?
     private var windowController: NSWindowController?
     
+    private var cancellables = Set<AnyCancellable>()
+    
     func setup(
         windowManager: WindowManager,
         keybindingManager: KeybindingManager,
@@ -31,11 +34,32 @@ final class StatusBarMenu: NSMenu {
         self.windowController = NSWindowController()
         
         setupMenuButtons()
-        setupNotificationObserver()
+        setupObservers()
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func setupObservers() {
+        setupAccessibilityPermissionObserver()
+        setupNotificationObserver()
+    }
+    
+    private func setupAccessibilityPermissionObserver() {
+        PermissionsManager.shared
+            .$accessibilityPermissionsGranted
+            .removeDuplicates()
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { accessibilityPermissionsGranted in
+                if accessibilityPermissionsGranted {
+                    // TODO: setup menu items
+                } else {
+                    // TODO: show prompt for accessibility permissions
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func setupNotificationObserver() {

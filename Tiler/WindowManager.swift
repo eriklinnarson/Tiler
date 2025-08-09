@@ -28,13 +28,6 @@ final class WindowManager {
         }
     }
     
-    // TODO: move to new PermissionsManager or something
-    func requestAccessibilityPermission() -> Bool {
-        let options: [String: Any] = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as String: true]
-        let isTrusted = AXIsProcessTrustedWithOptions(options as CFDictionary)
-        return isTrusted
-    }
-    
     private func placeFrontmostWindow(in screenArea: ScreenArea) {
         guard let window = getFrontmostWindow() else {
             return
@@ -121,6 +114,7 @@ final class WindowManager {
         )
         
         guard result == .success, let windowRef else {
+            PermissionsManager.shared.checkAccessibilityPermission()
             return nil
         }
         

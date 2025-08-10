@@ -24,6 +24,14 @@ extension KeybindingManager {
                 keyCode: 124, // right arrow
                 modifiers: [.control, .option]
             ): .placeWindowIn(.rightHalf),
+            .init(
+                keyCode: 125, // down arrow
+                modifiers: [.control, .option]
+            ): .placeWindowIn(.bottomHalf),
+            .init(
+                keyCode: 126, // up arrow
+                modifiers: [.control, .option]
+            ): .placeWindowIn(.topHalf),
             
             // MARK: - Shrink window
             .init(
@@ -34,6 +42,14 @@ extension KeybindingManager {
                 keyCode: 124, // right arrow
                 modifiers: [.control, .option, .shift]
             ): .shrinkWindow(.right),
+            .init(
+                keyCode: 125, // down arrow
+                modifiers: [.control, .option, .shift]
+            ): .shrinkWindow(.down),
+            .init(
+                keyCode: 126, // up arrow
+                modifiers: [.control, .option, .shift]
+            ): .shrinkWindow(.up),
             
             // MARK: - Expand window
             .init(
@@ -44,6 +60,14 @@ extension KeybindingManager {
                 keyCode: 124, // right arrow
                 modifiers: [.control, .option, .command]
             ): .expandWindow(.right),
+            .init(
+                keyCode: 125, // down arrow
+                modifiers: [.control, .option, .command]
+            ): .expandWindow(.down),
+            .init(
+                keyCode: 126, // up arrow
+                modifiers: [.control, .option, .command]
+            ): .expandWindow(.up),
         ]
     }
 }

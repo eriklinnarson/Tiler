@@ -14,6 +14,7 @@ enum ScreenArea: Int, CaseIterable, Identifiable, Codable {
     case leftHalf
     case rightHalf
     case topHalf
+    case bottomHalf
     case topLeft
     case topRight
     case bottomLeft
@@ -27,7 +28,7 @@ enum ScreenArea: Int, CaseIterable, Identifiable, Codable {
     ) -> CGPoint {
         var x: Int {
             switch self {
-            case .fullScreen, .leftHalf, .topHalf, .topLeft, .bottomLeft:
+            case .fullScreen, .leftHalf, .topHalf, .bottomHalf, .topLeft, .bottomLeft:
                 return 0
             case .rightHalf, .topRight, .bottomRight:
                 return Int(screen.width / 2)
@@ -38,7 +39,7 @@ enum ScreenArea: Int, CaseIterable, Identifiable, Codable {
             switch self {
             case .fullScreen, .leftHalf, .topHalf, .rightHalf, .topLeft, .topRight:
                 return Int(menuBarHeight)
-            case .bottomLeft, .bottomRight:
+            case .bottomHalf, .bottomLeft, .bottomRight:
                 return Int(((screen.height - menuBarHeight) / 2) + menuBarHeight)
             }
         }
@@ -52,7 +53,7 @@ enum ScreenArea: Int, CaseIterable, Identifiable, Codable {
     ) -> CGSize {
         var width: Double {
             switch self {
-            case .fullScreen, .topHalf:
+            case .fullScreen, .topHalf, .bottomHalf:
                 return screen.width
             case .leftHalf, .rightHalf, .topLeft, .bottomLeft, .topRight, .bottomRight:
                 return screen.width / 2
@@ -65,7 +66,7 @@ enum ScreenArea: Int, CaseIterable, Identifiable, Codable {
                 return screen.height
             case .leftHalf, .rightHalf:
                 return screen.height - menuBarHeight
-            case .topLeft, .topRight, .topHalf, .bottomLeft, .bottomRight:
+            case .topLeft, .topRight, .topHalf, .bottomHalf, .bottomLeft, .bottomRight:
                 return (screen.height - menuBarHeight) / 2
             }
         }

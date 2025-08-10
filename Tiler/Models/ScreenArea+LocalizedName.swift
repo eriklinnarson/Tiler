@@ -18,6 +18,8 @@ extension ScreenArea {
             "Right half"
         case .topHalf:
             "Top half"
+        case .bottomHalf:
+            "Bottom half"
         case .topLeft:
             "Top left"
         case .bottomLeft:
@@ -25,7 +27,7 @@ extension ScreenArea {
         case .topRight:
             "Top right"
         case .bottomRight:
-            "Bottom Right"
+            "Bottom right"
         }
     }
 }

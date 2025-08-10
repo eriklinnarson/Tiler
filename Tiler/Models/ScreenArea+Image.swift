@@ -27,6 +27,8 @@ extension ScreenArea {
             "inset.filled.righthalf.rectangle"
         case .topHalf:
             "inset.filled.tophalf.rectangle"
+        case .bottomHalf:
+            "inset.filled.bottomhalf.rectangle"
         case .topLeft:
             "inset.filled.topleft.rectangle"
         case .bottomLeft:

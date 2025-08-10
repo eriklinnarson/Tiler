@@ -16,6 +16,8 @@ extension ScreenArea {
             "Left half"
         case .rightHalf:
             "Right half"
+        case .topHalf:
+            "Top half"
         case .topLeft:
             "Top left"
         case .bottomLeft:

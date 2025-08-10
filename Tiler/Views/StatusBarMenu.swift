@@ -79,6 +79,8 @@ final class StatusBarMenu: NSMenu {
     private func setupMenuButtons() {
         removeAllItems()
         
+        addItem(appNameMenuBarItem())
+        
         ScreenArea.allCases.forEach {
             let menuItem = menuBarItem(for: .placeWindowIn($0))
             addItem(menuItem)
@@ -117,9 +119,16 @@ final class StatusBarMenu: NSMenu {
         let image = NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: "TODO")
         settingsButtonItem.image = image
         
+        addItem(appNameMenuBarItem())
         addItem(titleItem)
         addItem(settingsButtonItem)
         addItem(menuBarQuit())
+    }
+    
+    private func appNameMenuBarItem() -> NSMenuItem {
+        let menuItem = NSMenuItem()
+        menuItem.title = "Tiler"
+        return menuItem
     }
     
     private func menuBarItem(for action: Action) -> NSMenuItem {

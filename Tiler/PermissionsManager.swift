@@ -14,7 +14,7 @@ final class PermissionsManager {
     static let shared = PermissionsManager()
     
     private init() {
-        checkAccessibilityPermission()
+        requestAccessibilityPermission()
     }
     
     @Published private(set) var accessibilityPermissionsGranted: Bool?

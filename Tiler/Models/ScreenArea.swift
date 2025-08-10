@@ -14,8 +14,8 @@ enum ScreenArea: Int, CaseIterable, Identifiable, Codable {
     case leftHalf
     case rightHalf
     case topLeft
-    case bottomLeft
     case topRight
+    case bottomLeft
     case bottomRight
     
     var id: Self { self }

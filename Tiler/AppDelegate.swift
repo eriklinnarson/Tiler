@@ -37,13 +37,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+#if DEBUG
+        let menuBarIcon = Resources.menuBarIconDebug
+#else
         let menuBarIcon = Resources.menuBarIcon
+#endif
         
         if menuBarIcon == nil {
             Logger.appDelegate.error("Could not find menuBarIcon")
         }
         
-        statusBarItem.button?.image = Resources.menuBarIcon
+        statusBarItem.button?.image = menuBarIcon
         
         let statusBarMenu = StatusBarMenu()
         statusBarMenu.setup(

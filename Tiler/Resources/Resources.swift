@@ -13,4 +13,12 @@ struct Resources {
         image?.isTemplate = true
         return image
     }
+    
+#if DEBUG
+    static var menuBarIconDebug: NSImage? {
+        let debugImage = NSImage(named: "menuBarIconDebug")
+        debugImage?.isTemplate = true
+        return debugImage
+    }
+#endif
 }

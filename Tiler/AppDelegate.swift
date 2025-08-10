@@ -37,10 +37,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        statusBarItem.button?.image = NSImage(
-            systemSymbolName: "circle",
-            accessibilityDescription: "circle"
-        ) // TODO: Fix menu bar image
+        let image = NSImage(named: "menuBarIcon")
+        image?.isTemplate = true
+        statusBarItem.button?.image = image
         
         let statusBarMenu = StatusBarMenu()
         statusBarMenu.setup(

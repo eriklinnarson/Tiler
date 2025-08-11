@@ -21,10 +21,14 @@ struct SettingsWindowResizingView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
+            Text("Shrink window")
+                .font(.title)
             shrinkActionsList
             Divider()
                 .padding(.vertical)
+            Text("Expand window")
+                .font(.title)
             expandActionsList
         }
         .onDisappear(perform: viewModel.onViewDisappear)

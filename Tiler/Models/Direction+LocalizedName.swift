@@ -8,29 +8,16 @@
 import Foundation
 
 extension Direction {
-    var shrinkLocalizedName: String {
+    var localizedName: String {
         switch self {
         case .left:
-            "Shrink towards left"
+            "Left"
         case .right:
-            "Shrink towards right"
+            "Right"
         case .up:
-            "Shrink upwards"
+            "Up"
         case .down:
-            "Shrink downwards"
-        }
-    }
-    
-    var expandLocalizedName: String {
-        switch self {
-        case .left:
-            "Grow towards left"
-        case .right:
-            "Grow towards right"
-        case .up:
-            "Grow upwards"
-        case .down:
-            "Grow downwards"
+            "Down"
         }
     }
 }

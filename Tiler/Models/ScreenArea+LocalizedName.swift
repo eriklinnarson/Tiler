@@ -11,7 +11,7 @@ extension ScreenArea {
     var localizedName: String {
         switch self {
         case .fullScreen:
-            "Full screen"
+            "Fill screen"
         case .leftHalf:
             "Left half"
         case .rightHalf:

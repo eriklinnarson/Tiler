@@ -87,6 +87,7 @@ final class StatusBarMenu: NSMenu {
         }
         
         addItem(NSMenuItem.separator())
+        addItem(NSMenuItem.labelItem("Shrink window"))
         
         Direction.allCases.forEach {
             let menuItem = menuBarItem(for: .shrinkWindow($0))
@@ -94,6 +95,7 @@ final class StatusBarMenu: NSMenu {
         }
         
         addItem(NSMenuItem.separator())
+        addItem(NSMenuItem.labelItem("Expand window"))
         
         Direction.allCases.forEach {
             let menuItem = menuBarItem(for: .expandWindow($0))
@@ -248,5 +250,13 @@ private extension Action {
         case .expandWindow(let direction):
             direction.rawValue
         }
+    }
+}
+
+extension NSMenuItem {
+    static func labelItem(_ string: String) -> NSMenuItem {
+        let menuItem = NSMenuItem()
+        menuItem.title = string
+        return menuItem
     }
 }

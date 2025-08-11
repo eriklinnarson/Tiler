@@ -29,9 +29,9 @@ enum Action: Equatable, Identifiable, Codable {
         case .placeWindowIn(let screenArea):
             screenArea.localizedName
         case .shrinkWindow(let direction):
-            direction.shrinkLocalizedName
+            direction.localizedName
         case .expandWindow(let direction):
-            direction.expandLocalizedName
+            direction.localizedName
         }
     }
     

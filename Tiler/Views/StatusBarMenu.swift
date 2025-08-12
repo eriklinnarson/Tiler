@@ -34,6 +34,10 @@ final class StatusBarMenu: NSMenu {
         
         setupMenuButtons()
         setupObservers()
+        
+#if DEBUG
+        openDebugWindow()
+#endif
     }
     
     deinit {
@@ -105,6 +109,9 @@ final class StatusBarMenu: NSMenu {
         
         addItem(menuBarPreferences())
         addItem(menuBarQuit())
+#if DEBUG
+        addItem(openDebugWindowMenuItem())
+#endif
     }
     
     private func setupMenuForMissingAccessibilitySettings() {
@@ -237,6 +244,33 @@ final class StatusBarMenu: NSMenu {
         Logger.statusBarMenu.info("Quit app button pressed, closing down...")
         NSApplication.shared.terminate(self)
     }
+    
+#if DEBUG
+    private let debugWindowController = NSWindowController()
+    
+    @objc
+    func openDebugWindow() {
+        if debugWindowController.window == nil {
+            let hostingViewController = NSHostingController(
+                rootView: DebugWindow()
+            )
+            let window = NSWindow(contentViewController: hostingViewController)
+            window.title = "Tiler - Debug Window"
+            debugWindowController.window = window
+        }
+        debugWindowController.showWindow(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    
+    func openDebugWindowMenuItem() -> NSMenuItem {
+        let menuItem = NSMenuItem()
+        menuItem.title = "Open Debug Window"
+        menuItem.image = NSImage(systemSymbolName: "hammer.fill", accessibilityDescription: nil)
+        menuItem.action = #selector(openDebugWindow)
+        menuItem.target = self
+        return menuItem
+    }
+#endif
 }
 
 private extension Action {

@@ -14,7 +14,7 @@ extension Direction {
     }
     
     var nsImage: NSImage? {
-        NSImage(systemSymbolName: systemName, accessibilityDescription: "TODO")
+        NSImage(systemSymbolName: systemName, accessibilityDescription: nil)
     }
     
     private var systemName: String {

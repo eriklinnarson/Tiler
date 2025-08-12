@@ -7,7 +7,6 @@
 
 import Foundation
 
-// TODO: Add remaining default keybindings
 extension KeybindingManager {
     static func defaultKeybindings() -> [Keystroke: Action] {
         [

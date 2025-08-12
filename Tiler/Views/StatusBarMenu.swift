@@ -117,7 +117,7 @@ final class StatusBarMenu: NSMenu {
         settingsButtonItem.title = "Open settings"
         settingsButtonItem.action = #selector(openSystemSettings)
         settingsButtonItem.target = self
-        let image = NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: "TODO")
+        let image = NSImage(systemSymbolName: "gearshape.fill", accessibilityDescription: nil)
         settingsButtonItem.image = image
         
         addItem(appNameMenuBarItem())

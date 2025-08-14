@@ -105,4 +105,56 @@ final class SizePositionCalculator {
         
         return WindowPlacement(position: newPosition, size: newSize)
     }
+    
+    func idealSize(
+        of screenArea: ScreenArea,
+        in screen: NSRect,
+        withMenuBarHeight menuBarHeight: CGFloat = TilerApp.menuBarHeight
+    ) -> CGSize {
+        var width: Double {
+            switch screenArea {
+            case .fullScreen, .topHalf, .bottomHalf:
+                return screen.width
+            case .leftHalf, .rightHalf, .topLeft, .bottomLeft, .topRight, .bottomRight:
+                return screen.width / 2
+            }
+        }
+        
+        var height: Double {
+            switch screenArea {
+            case .fullScreen, .leftHalf, .rightHalf:
+                return screen.height - menuBarHeight
+            case .topLeft, .topRight, .topHalf, .bottomHalf, .bottomLeft, .bottomRight:
+                return (screen.height - menuBarHeight) / 2
+            }
+        }
+        
+        return CGSize(width: width, height: height)
+    }
+    
+    func idealPosition(
+        of screenArea: ScreenArea,
+        in screen: NSRect,
+        withMenuBarHeight menuBarHeight: CGFloat = TilerApp.menuBarHeight
+    ) -> CGPoint {
+        var x: Int {
+            switch screenArea {
+            case .fullScreen, .leftHalf, .topHalf, .bottomHalf, .topLeft, .bottomLeft:
+                return 0
+            case .rightHalf, .topRight, .bottomRight:
+                return Int(screen.width / 2)
+            }
+        }
+        
+        var y: Int {
+            switch screenArea {
+            case .fullScreen, .leftHalf, .topHalf, .rightHalf, .topLeft, .topRight:
+                return Int(menuBarHeight)
+            case .bottomHalf, .bottomLeft, .bottomRight:
+                return Int(((screen.height - menuBarHeight) / 2) + menuBarHeight)
+            }
+        }
+        
+        return CGPoint(x: x, y: y)
+    }
 }

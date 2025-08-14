@@ -29,22 +29,60 @@ final class WindowManager {
     }
     
     private func placeFrontmostWindow(in screenArea: ScreenArea) {
-        guard let window = getFrontmostWindow() else {
+        guard
+            let window = getFrontmostWindow(),
+            let screenSize = getScreenSize()
+        else {
             return
         }
         
-        guard let screenSize = getScreenSize() else {
+        let idealSize = sizePositionCalculator.idealSize(of: screenArea, in: screenSize)
+        
+        // Start by setting the position in the top-left corner.
+        // This gives us space to resize as much as needed.
+        setPosition(.init(x: 0, y: 0), to: window)
+        
+        setSize(idealSize, to: window)
+        
+        guard let updatedSize = getCurrentSize(of: window) else {
             return
         }
         
-        let windowPosition = screenArea.cgPosition(in: screenSize)
-        let windowSize = screenArea.cgSize(in: screenSize)
+        var adjustedX = idealSize.width - updatedSize.width
         
-        applyWindowPlacement(
-            WindowPlacement(position: windowPosition, size: windowSize),
-            window: window,
-            screenSize: screenSize
+        switch screenArea {
+        case .leftHalf, .topLeft, .bottomLeft:
+            // No adjustment needed, align to left edge
+            adjustedX = 0
+        case .topHalf, .bottomHalf, .fullScreen:
+            // Center the window horizontally
+            adjustedX = adjustedX / 2
+        case .rightHalf, .topRight, .bottomRight:
+            // Pin the window to the right edge
+            break
+        }
+        
+        var adjustedY = idealSize.height - updatedSize.height
+        
+        switch screenArea {
+        case .leftHalf, .rightHalf, .fullScreen:
+            // Center the window vertically
+            adjustedY = adjustedY / 2
+        case .topHalf, .topLeft, .topRight:
+            // No adjustment needed, pin to top edge
+            adjustedY = 0
+        case .bottomHalf, .bottomLeft, .bottomRight:
+            // Pin the window to the bottom edge
+            break
+        }
+        
+        let idealPosition = sizePositionCalculator.idealPosition(of: screenArea, in: screenSize)
+        let actualPosition = CGPoint(
+            x: idealPosition.x + adjustedX,
+            y: idealPosition.y + adjustedY
         )
+        
+        setPosition(actualPosition, to: window)
     }
     
     private func shrinkFrontmostWindowTowards(_ shrinkDirection: Direction) {

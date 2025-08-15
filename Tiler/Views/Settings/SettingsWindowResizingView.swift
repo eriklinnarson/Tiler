@@ -24,6 +24,8 @@ struct SettingsWindowResizingView: View {
         VStack(alignment: .leading) {
             Text("Smart resize window")
                 .font(.title)
+            Text("Shrink or expand in one action. If the window is already aligned to the edge of the screen in the desired direction, it will shrink. Otherwise it will expand.")
+                .font(.body)
             actionListBuilder {
                 Action.smartResize($0)
             }

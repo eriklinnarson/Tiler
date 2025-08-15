@@ -17,8 +17,8 @@ struct SettingsPageStylingViewModifer: ViewModifier {
     func body(content: Content) -> some View {
         ScrollView {
             content
+                .padding()
         }
-        .padding()
         .font(.title2)
     }
 }

@@ -32,41 +32,23 @@ extension KeybindingManager {
                 modifiers: [.control, .option]
             ): .placeWindowIn(.topHalf),
             
-            // MARK: - Shrink window
-            .init(
-                keyCode: 123, // left arrow
-                modifiers: [.control, .option, .shift]
-            ): .shrinkWindow(.left),
-            .init(
-                keyCode: 124, // right arrow
-                modifiers: [.control, .option, .shift]
-            ): .shrinkWindow(.right),
-            .init(
-                keyCode: 125, // down arrow
-                modifiers: [.control, .option, .shift]
-            ): .shrinkWindow(.down),
-            .init(
-                keyCode: 126, // up arrow
-                modifiers: [.control, .option, .shift]
-            ): .shrinkWindow(.up),
-            
-            // MARK: - Expand window
+            // MARK: - Smart resize
             .init(
                 keyCode: 123, // left arrow
                 modifiers: [.control, .option, .command]
-            ): .expandWindow(.left),
+            ): .smartResize(.left),
             .init(
                 keyCode: 124, // right arrow
                 modifiers: [.control, .option, .command]
-            ): .expandWindow(.right),
+            ): .smartResize(.right),
             .init(
                 keyCode: 125, // down arrow
                 modifiers: [.control, .option, .command]
-            ): .expandWindow(.down),
+            ): .smartResize(.down),
             .init(
                 keyCode: 126, // up arrow
                 modifiers: [.control, .option, .command]
-            ): .expandWindow(.up),
+            ): .smartResize(.up),
         ]
     }
 }

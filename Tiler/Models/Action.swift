@@ -12,6 +12,7 @@ enum Action: Equatable, Identifiable, Codable {
     case placeWindowIn(ScreenArea)
     case shrinkWindow(Direction)
     case expandWindow(Direction)
+    case smartResize(Direction)
     
     var id: String {
         switch self {
@@ -21,6 +22,8 @@ enum Action: Equatable, Identifiable, Codable {
             "shrinkWindow\(direction.rawValue)"
         case .expandWindow(let direction):
             "expandWindow\(direction.rawValue)"
+        case .smartResize(let direction):
+            "smartResize\(direction.rawValue)"
         }
     }
     
@@ -31,6 +34,8 @@ enum Action: Equatable, Identifiable, Codable {
         case .shrinkWindow(let direction):
             direction.localizedName
         case .expandWindow(let direction):
+            direction.localizedName
+        case .smartResize(let direction):
             direction.localizedName
         }
     }
@@ -43,6 +48,8 @@ enum Action: Equatable, Identifiable, Codable {
             direction.nsImage
         case .expandWindow(let direction):
             direction.nsImage
+        case .smartResize(let direction):
+            direction.nsImage
         }
     }
     
@@ -53,6 +60,8 @@ enum Action: Equatable, Identifiable, Codable {
         case .shrinkWindow(let direction):
             direction.image
         case .expandWindow(let direction):
+            direction.image
+        case .smartResize(let direction):
             direction.image
         }
     }

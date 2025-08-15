@@ -25,6 +25,8 @@ final class WindowManager {
             shrinkFrontmostWindowTowards(direction)
         case .expandWindow(let direction):
             expandFrontmostWindowTowards(direction)
+        case .smartResize(let direction):
+            smartResizeFrontmostWindowTowards(direction)
         }
     }
     
@@ -133,6 +135,49 @@ final class WindowManager {
             window: window,
             screenSize: screenSize
         )
+    }
+    
+    private func smartResizeFrontmostWindowTowards(_ direction: Direction) {
+        let windowPinnedToScreenInDirections = getFrontmostWindowAlignedToScreenInDirections()
+        
+        if windowPinnedToScreenInDirections.contains(direction) {
+            shrinkFrontmostWindowTowards(direction)
+        } else {
+            expandFrontmostWindowTowards(direction)
+        }
+    }
+    
+    private func getFrontmostWindowAlignedToScreenInDirections() -> [Direction] {
+        guard
+            let window = getFrontmostWindow(),
+            let windowPosition = getCurrentPosition(of: window),
+            let windowSize = getCurrentSize(of: window),
+            let screenSize = getScreenSize()
+        else {
+            return []
+        }
+        
+        var screenEdges = [Direction]()
+        
+        let isPinnedToTop = windowPosition.y == TilerApp.menuBarHeight + 1
+        let isPinnedToLeft = windowPosition.x == 0
+        let isPinnedToBottom = windowPosition.y + windowSize.height == screenSize.height
+        let isPinnedToRight = windowPosition.x + windowSize.width == screenSize.width
+        
+        if isPinnedToTop {
+            screenEdges.append(.up)
+        }
+        if isPinnedToLeft {
+            screenEdges.append(.left)
+        }
+        if isPinnedToBottom {
+            screenEdges.append(.down)
+        }
+        if isPinnedToRight {
+            screenEdges.append(.right)
+        }
+        
+        return screenEdges
     }
     
     private func getFrontmostWindow() -> AXUIElement? {
@@ -275,4 +320,15 @@ final class WindowManager {
         }
         return screenSize
     }
+    
+#if DEBUG
+    func screenAlignedInDirections() -> [Direction] {
+        getFrontmostWindowAlignedToScreenInDirections()
+    }
+    
+    func frontMostWindowPosition() -> CGPoint? {
+        guard let window = getFrontmostWindow() else { return nil }
+        return getCurrentPosition(of: window)
+    }
+#endif
 }

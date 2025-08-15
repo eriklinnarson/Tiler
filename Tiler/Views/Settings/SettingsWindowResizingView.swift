@@ -22,36 +22,40 @@ struct SettingsWindowResizingView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Shrink window")
+            Text("Smart resize window")
                 .font(.title)
-            shrinkActionsList
+            actionListBuilder {
+                Action.smartResize($0)
+            }
+            
             Divider()
                 .padding(.vertical)
+            
+            Text("Shrink window")
+                .font(.title)
+            actionListBuilder {
+                Action.shrinkWindow($0)
+            }
+            
+            Divider()
+                .padding(.vertical)
+            
             Text("Expand window")
                 .font(.title)
-            expandActionsList
+            actionListBuilder {
+                Action.expandWindow($0)
+            }
         }
         .onDisappear(perform: viewModel.onViewDisappear)
         .settingsPageStyling()
     }
     
     @ViewBuilder
-    var shrinkActionsList: some View {
-        let placeWindowActions = Direction.allCases.map { Action.shrinkWindow($0) }
-        let rowModels = placeWindowActions.map {
-            viewModel.rowModel(forAction: $0)
+    private func actionListBuilder(_ actionBuilder: (Direction) -> Action) -> some View {
+        let actions = Direction.allCases.map {
+            actionBuilder($0)
         }
-        
-        ActionKeybindingListView(
-            models: rowModels,
-            rowViewBuilder: actionKeybindingRowBuilder(_:)
-        )
-    }
-    
-    @ViewBuilder
-    var expandActionsList: some View {
-        let placeWindowActions = Direction.allCases.map { Action.expandWindow($0) }
-        let rowModels = placeWindowActions.map {
+        let rowModels = actions.map {
             viewModel.rowModel(forAction: $0)
         }
         

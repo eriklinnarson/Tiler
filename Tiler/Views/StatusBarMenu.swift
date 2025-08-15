@@ -36,7 +36,7 @@ final class StatusBarMenu: NSMenu {
         setupObservers()
         
 #if DEBUG
-        openDebugWindow()
+//        openDebugWindow()
 #endif
     }
     
@@ -86,6 +86,14 @@ final class StatusBarMenu: NSMenu {
         
         ScreenArea.allCases.forEach {
             let menuItem = menuBarItem(for: .placeWindowIn($0))
+            addItem(menuItem)
+        }
+        
+        addItem(NSMenuItem.separator())
+        addItem(NSMenuItem.labelItem("Smart resize"))
+        
+        Direction.allCases.forEach {
+            let menuItem = menuBarItem(for: .smartResize($0))
             addItem(menuItem)
         }
         
@@ -149,6 +157,8 @@ final class StatusBarMenu: NSMenu {
             #selector(didTapMenuItemForShrinkDirection(sender:))
         case .expandWindow:
             #selector(didTapMenuItemForExpandDirection(sender:))
+        case .smartResize:
+            #selector(didTapMenuItemForSmartResize(sender:))
         }
         
         menuItem.title = action.localizedName
@@ -209,6 +219,15 @@ final class StatusBarMenu: NSMenu {
         windowManager?.execute(action)
     }
     
+    @objc private func didTapMenuItemForSmartResize(sender: NSMenuItem) {
+        guard let smartResizeDirectionTapped = Direction(rawValue: sender.tag) else {
+            return
+        }
+        let action = Action.smartResize(smartResizeDirectionTapped)
+        Logger.statusBarMenu.info("Action called from menu: \(action.id)")
+        windowManager?.execute(action)
+    }
+    
     @objc private func openPreferences() {
         guard let keystrokeManager, let keybindingManager else {
             Logger.statusBarMenu.error("Improper setup")
@@ -250,9 +269,11 @@ final class StatusBarMenu: NSMenu {
     
     @objc
     func openDebugWindow() {
+        guard let windowManager else { return }
+        
         if debugWindowController.window == nil {
             let hostingViewController = NSHostingController(
-                rootView: DebugWindow()
+                rootView: DebugWindow(windowManager: windowManager)
             )
             let window = NSWindow(contentViewController: hostingViewController)
             window.title = "Tiler - Debug Window"
@@ -281,6 +302,8 @@ private extension Action {
         case .shrinkWindow(let direction):
             direction.rawValue
         case .expandWindow(let direction):
+            direction.rawValue
+        case .smartResize(let direction):
             direction.rawValue
         }
     }

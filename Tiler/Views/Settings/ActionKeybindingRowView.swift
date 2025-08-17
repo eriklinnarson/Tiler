@@ -47,7 +47,7 @@ struct ActionKeybindingRowView: View {
                         isSelected ? .blue : .clear,
                         lineWidth: 4
                     )
-                    .fill(Color.white)
+                    .fill(Color(NSColor.windowBackgroundColor))
                     .shadow(radius: 1, x: 1, y: 1)
                     .animation(.easeInOut(duration: 0.2), value: isSelected)
             }

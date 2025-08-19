@@ -19,6 +19,10 @@ final class SettingsManager {
         windowResizingAmount = storage.getWindowResizingAmount()
     }
     
+    func restoreToDefaultSettings() throws {
+        try setWindowResizingAmount(WindowResizingAmount.defaultValue)
+    }
+    
     func getWindowResizingAmount() -> WindowResizingAmount {
         storage.getWindowResizingAmount()
     }

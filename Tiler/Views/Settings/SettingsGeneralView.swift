@@ -10,8 +10,13 @@ import SwiftUI
 struct SettingsGeneralView: View {
     @StateObject private var viewModel: SettingsGeneralViewModel
     
-    init(keybindingManager: KeybindingManager) {
-        _viewModel = StateObject(wrappedValue: .init(keybindingManager: keybindingManager))
+    init(keybindingManager: KeybindingManager, settingsManager: SettingsManager) {
+        _viewModel = StateObject(
+            wrappedValue: .init(
+                keybindingManager: keybindingManager,
+                settingsManager: settingsManager
+            )
+        )
     }
     
     var body: some View {

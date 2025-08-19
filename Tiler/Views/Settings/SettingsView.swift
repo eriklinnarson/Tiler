@@ -62,7 +62,8 @@ struct SettingsView: View {
         switch viewModel.selectedTab {
         case .general:
             SettingsGeneralView(
-                keybindingManager: viewModel.keybindingManager
+                keybindingManager: viewModel.keybindingManager,
+                settingsManager: viewModel.settingsManager
             )
         case .windowSnapping:
             SettingsWindowSnappingView(

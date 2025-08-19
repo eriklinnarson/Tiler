@@ -32,8 +32,14 @@ struct SettingsView: View {
         } detail: {
             detailView
         }
-        .navigationSplitViewStyle(.balanced)
         .frame(minWidth: 600, minHeight: 400)
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Button(action: toggleSidebar) {
+                    Image(systemName: "sidebar.left")
+                }
+            }
+        }
     }
     
     var sideBar: some View {
@@ -47,11 +53,6 @@ struct SettingsView: View {
                 if let appVersionDisplay = viewModel.appVersionDisplay {
                     Text("Version \(appVersionDisplay)")
                 }
-#if DEBUG
-                if let buildNumberDisplay = viewModel.buildNumberDisplay {
-                    Text("Build number: \(buildNumberDisplay)")
-                }
-#endif
             }
             .padding(.bottom, 3)
         }
@@ -77,5 +78,9 @@ struct SettingsView: View {
                 settingsManager: viewModel.settingsManager
             )
         }
+    }
+    
+    func toggleSidebar() {
+        NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
     }
 }

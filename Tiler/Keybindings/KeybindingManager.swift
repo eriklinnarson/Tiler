@@ -8,10 +8,6 @@
 import AppKit
 import OSLog
 
-private extension Logger {
-    static let keybindingManager = Logger(subsystem: subsystem, category: "keybindingManager")
-}
-
 final class KeybindingManager {
     
     let settingsStorageManager: SettingsStorageManager
@@ -90,4 +86,8 @@ private extension Keystroke {
         modifiers.remove(.function)
         return Keystroke(keyCode: keyCode, modifiers: modifiers)
     }
+}
+
+private extension Logger {
+    static let keybindingManager = Logger(subsystem: subsystem, category: "keybindingManager")
 }

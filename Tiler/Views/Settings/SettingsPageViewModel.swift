@@ -9,10 +9,6 @@ import SwiftUI
 import Combine
 import OSLog
 
-private extension Logger {
-    static let settingsPageViewModel = Logger(subsystem: subsystem, category: "settingsPageViewModel")
-}
-
 struct ActionKeybindingRowModel: Identifiable {
     let action: Action
     let keybinding: Keystroke?
@@ -166,4 +162,8 @@ class SettingsWindowResizingViewModel: SettingsPageViewModel {
             }
             .store(in: &cancellables)
     }
+}
+
+private extension Logger {
+    static let settingsPageViewModel = Logger(subsystem: subsystem, category: "settingsPageViewModel")
 }

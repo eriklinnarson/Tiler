@@ -8,10 +8,6 @@
 import Foundation
 import OSLog
 
-private extension Logger {
-    static let settingsStorageManager = Logger(subsystem: subsystem, category: "settingsStorageManager")
-}
-
 final class SettingsStorageManager {
     enum StorageError: Error {
         case unableToSaveChange
@@ -75,4 +71,8 @@ final class SettingsStorageManager {
             throw .unableToSaveChange
         }
     }
+}
+
+private extension Logger {
+    static let settingsStorageManager = Logger(subsystem: subsystem, category: "settingsStorageManager")
 }

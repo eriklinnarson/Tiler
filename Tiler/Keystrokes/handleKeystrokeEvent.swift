@@ -8,10 +8,6 @@
 import AppKit
 import OSLog
 
-private extension Logger {
-    static let keyStrokeEvent = Logger(subsystem: subsystem, category: "keyStrokeEvent")
-}
-
 func handleKeystrokeEvent(
     proxy: CGEventTapProxy,
     type: CGEventType,
@@ -57,4 +53,8 @@ func handleKeystrokeEvent(
     
     // Consume the tap event
     return nil    
+}
+
+private extension Logger {
+    static let keyStrokeEvent = Logger(subsystem: subsystem, category: "keyStrokeEvent")
 }

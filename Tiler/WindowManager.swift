@@ -10,10 +10,6 @@ import ApplicationServices
 import Combine
 import OSLog
 
-private extension Logger {
-    static let windowManager = Logger(subsystem: subsystem, category: "windowManager")
-}
-
 final class WindowManager {
     
     private let sizePositionCalculator = SizePositionCalculator()
@@ -355,4 +351,8 @@ final class WindowManager {
         return getCurrentPosition(of: window)
     }
 #endif
+}
+
+private extension Logger {
+    static let windowManager = Logger(subsystem: subsystem, category: "windowManager")
 }

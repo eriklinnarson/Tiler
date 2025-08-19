@@ -7,10 +7,6 @@
 
 import OSLog
 
-private extension Logger {
-    static let settingsGeneralViewModel = Logger(subsystem: subsystem, category: "settingsGeneralViewModel")
-}
-
 final class SettingsGeneralViewModel: ObservableObject {
     let keybindingManager: KeybindingManager
     let settingsManager: SettingsManager
@@ -39,4 +35,8 @@ final class SettingsGeneralViewModel: ObservableObject {
     func didTapCancelRestoreSettings() {
         Logger.settingsGeneralViewModel.info("Restore settings cancelled")
     }
+}
+
+private extension Logger {
+    static let settingsGeneralViewModel = Logger(subsystem: subsystem, category: "settingsGeneralViewModel")
 }

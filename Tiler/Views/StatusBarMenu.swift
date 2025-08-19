@@ -10,10 +10,6 @@ import Combine
 import OSLog
 import SwiftUI
 
-private extension Logger {
-    static let statusBarMenu = Logger(subsystem: subsystem, category: "statusBarMenu")
-}
-
 final class StatusBarMenu: NSMenu {
     
     private var windowManager: WindowManager?
@@ -323,4 +319,8 @@ extension NSMenuItem {
         menuItem.title = string
         return menuItem
     }
+}
+
+private extension Logger {
+    static let statusBarMenu = Logger(subsystem: subsystem, category: "statusBarMenu")
 }

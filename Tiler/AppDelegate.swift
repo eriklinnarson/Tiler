@@ -8,10 +8,6 @@
 import AppKit
 import OSLog
 
-private extension Logger {
-    static let appDelegate = Logger(subsystem: subsystem, category: "appDelegate")
-}
-
 class AppDelegate: NSObject, NSApplicationDelegate {
     let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     
@@ -65,4 +61,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let buildNumber = Bundle.main.buildNumberDisplay ?? ""
         Logger.appDelegate.info("App start, version: \(appVersion), build number: \(buildNumber)")
     }
+}
+
+private extension Logger {
+    static let appDelegate = Logger(subsystem: subsystem, category: "appDelegate")
 }

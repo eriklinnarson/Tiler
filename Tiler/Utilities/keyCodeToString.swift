@@ -8,10 +8,6 @@
 import Carbon
 import OSLog
 
-private extension Logger {
-    static let keyCodeToString = Logger(subsystem: subsystem, category: "keyCodeToString")
-}
-
 func keyCodeToString(_ keyCode: CGKeyCode) -> String {
     // https://stackoverflow.com/questions/29048826/when-to-use-takeunretainedvalue-or-takeretainedvalue-to-retrieve-unmanaged-o
     // https://nshipster.com/unmanaged/
@@ -40,4 +36,8 @@ func keyCodeToString(_ keyCode: CGKeyCode) -> String {
     }
     
     return NSString(characters: unicodeString, length: actualStringLength) as String
+}
+
+private extension Logger {
+    static let keyCodeToString = Logger(subsystem: subsystem, category: "keyCodeToString")
 }

@@ -9,11 +9,10 @@ import Foundation
 import AppKit
 
 final class SizePositionCalculator {
-    var resizeIncrement = 50.0
-    
     func calculateShrink(
         towards direction: Direction,
-        currentWindowPlacement: WindowPlacement
+        currentWindowPlacement: WindowPlacement,
+        resizeIncrement: Int
     ) -> WindowPlacement {
         let currentWindowPosition = currentWindowPlacement.position
         let currentWindowSize = currentWindowPlacement.size
@@ -24,31 +23,31 @@ final class SizePositionCalculator {
         switch direction {
         case .left:
             newSize = CGSize(
-                width: currentWindowSize.width - resizeIncrement,
+                width: currentWindowSize.width - Double(resizeIncrement),
                 height: currentWindowSize.height
             )
         case .right:
             newSize = CGSize(
-                width: currentWindowSize.width - resizeIncrement,
+                width: currentWindowSize.width - Double(resizeIncrement),
                 height: currentWindowSize.height
             )
             newPosition = CGPoint(
-                x: currentWindowPosition.x + resizeIncrement,
+                x: currentWindowPosition.x + Double(resizeIncrement),
                 y: currentWindowPosition.y
             )
         case .up:
             newSize = CGSize(
                 width: currentWindowSize.width,
-                height: currentWindowSize.height - resizeIncrement
+                height: currentWindowSize.height - Double(resizeIncrement),
             )
         case .down:
             newSize = CGSize(
                 width: currentWindowSize.width,
-                height: currentWindowSize.height - resizeIncrement
+                height: currentWindowSize.height - Double(resizeIncrement),
             )
             newPosition = CGPoint(
                 x: currentWindowPosition.x,
-                y: currentWindowPosition.y + resizeIncrement
+                y: currentWindowPosition.y + Double(resizeIncrement),
             )
         }
         
@@ -57,7 +56,8 @@ final class SizePositionCalculator {
     
     func calculateExpansion(
         towards direction: Direction,
-        currentWindowPlacement: WindowPlacement
+        currentWindowPlacement: WindowPlacement,
+        resizeIncrement: Int
     ) -> WindowPlacement {
         let currentWindowPosition = currentWindowPlacement.position
         let currentWindowSize = currentWindowPlacement.size
@@ -68,31 +68,31 @@ final class SizePositionCalculator {
         switch direction {
         case .left:
             newSize = CGSize(
-                width: currentWindowSize.width + resizeIncrement,
+                width: currentWindowSize.width + Double(resizeIncrement),
                 height: currentWindowSize.height
             )
             newPosition = CGPoint(
-                x: currentWindowPosition.x - resizeIncrement,
+                x: currentWindowPosition.x - Double(resizeIncrement),
                 y: currentWindowPosition.y
             )
         case .right:
             newSize = CGSize(
-                width: currentWindowSize.width + resizeIncrement,
+                width: currentWindowSize.width + Double(resizeIncrement),
                 height: currentWindowSize.height
             )
         case .up:
             newSize = CGSize(
                 width: currentWindowSize.width,
-                height: currentWindowSize.height + resizeIncrement
+                height: currentWindowSize.height + Double(resizeIncrement),
             )
             newPosition = CGPoint(
                 x: currentWindowPosition.x,
-                y: currentWindowPosition.y - resizeIncrement
+                y: currentWindowPosition.y - Double(resizeIncrement),
             )
         case .down:
             newSize = CGSize(
                 width: currentWindowSize.width,
-                height: currentWindowSize.height + resizeIncrement
+                height: currentWindowSize.height + Double(resizeIncrement),
             )
         }
         

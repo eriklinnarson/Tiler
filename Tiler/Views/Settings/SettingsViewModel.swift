@@ -30,9 +30,15 @@ final class SettingsViewModel: ObservableObject {
     
     let keystrokeManager: KeystrokeManager
     let keybindingManager: KeybindingManager
+    let settingsManager: SettingsManager
     
-    init(keystrokeManager: KeystrokeManager, keybindingManager: KeybindingManager) {
+    init(
+        keystrokeManager: KeystrokeManager,
+        keybindingManager: KeybindingManager,
+        settingsManager: SettingsManager
+    ) {
         self.keystrokeManager = keystrokeManager
         self.keybindingManager = keybindingManager
+        self.settingsManager = settingsManager
     }
 }

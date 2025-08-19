@@ -10,5 +10,6 @@ import AppKit
 extension UserDefaults {
     enum Keys: String {
         case actionKeybindings
+        case windowResizingAmount
     }
 }

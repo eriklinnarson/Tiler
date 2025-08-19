@@ -8,19 +8,68 @@
 import SwiftUI
 
 struct SettingsWindowResizingView: View {
+        
+    @StateObject private var viewModel: SettingsWindowResizingViewModel
     
-    @StateObject private var viewModel: SettingsPageViewModel
-    
-    init(keybindingManager: KeybindingManager, keystrokeManager: KeystrokeManager) {
+    init(
+        keybindingManager: KeybindingManager,
+        keystrokeManager: KeystrokeManager,
+        settingsManager: SettingsManager
+    ) {
         _viewModel = StateObject(
             wrappedValue: .init(
                 keybindingManager: keybindingManager,
-                keystrokeManager: keystrokeManager
+                keystrokeManager: keystrokeManager,
+                settingsManager: settingsManager
             )
         )
     }
     
     var body: some View {
+        VStack(alignment: .leading) {
+            resizingAmountSection
+            
+            Divider()
+                .padding(.vertical)
+            
+            smartResizeSection
+            
+            Divider()
+                .padding(.vertical)
+            
+            shrinkWindowSection
+            
+            Divider()
+                .padding(.vertical)
+            
+            expandWindowSection
+        }
+        .onDisappear(perform: viewModel.onViewDisappear)
+        .settingsPageStyling()
+    }
+    
+    private var resizingAmountSection: some View {
+        VStack(alignment: .leading) {
+            Text("Window resizing amount")
+                .font(.title)
+            
+            Text("Set how many pixels each resizing action will be.")
+                .font(.body)
+            
+            HStack {
+                Stepper(
+                    value: $viewModel.windowResizingConstantTextField,
+                    in: 10...300,
+                    step: 10
+                ) {
+                    EmptyView()
+                }
+                Text("\(viewModel.windowResizingConstantTextField) pixels")
+            }
+        }
+    }
+    
+    private var smartResizeSection: some View {
         VStack(alignment: .leading) {
             Text("Smart resize window")
                 .font(.title)
@@ -29,27 +78,27 @@ struct SettingsWindowResizingView: View {
             actionListBuilder {
                 Action.smartResize($0)
             }
-            
-            Divider()
-                .padding(.vertical)
-            
+        }
+    }
+    
+    private var shrinkWindowSection: some View {
+        VStack(alignment: .leading) {
             Text("Shrink window")
                 .font(.title)
             actionListBuilder {
                 Action.shrinkWindow($0)
             }
-            
-            Divider()
-                .padding(.vertical)
-            
+        }
+    }
+    
+    private var expandWindowSection: some View {
+        VStack(alignment: .leading) {
             Text("Expand window")
                 .font(.title)
             actionListBuilder {
                 Action.expandWindow($0)
             }
         }
-        .onDisappear(perform: viewModel.onViewDisappear)
-        .settingsPageStyling()
     }
     
     @ViewBuilder

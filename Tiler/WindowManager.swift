@@ -5,8 +5,9 @@
 //  Created by Erik Linnarson on 2025-06-07.
 //
 
-import ApplicationServices
 import AppKit
+import ApplicationServices
+import Combine
 import OSLog
 
 private extension Logger {
@@ -15,7 +16,18 @@ private extension Logger {
 
 final class WindowManager {
     
-    let sizePositionCalculator = SizePositionCalculator()
+    private let sizePositionCalculator = SizePositionCalculator()
+    private let settingsManager: SettingsManager
+    
+    private var cancellables = Set<AnyCancellable>()
+    private var windowResizingAmount: WindowResizingAmount
+    
+    init(settingsManager: SettingsManager) {
+        self.settingsManager = settingsManager
+        
+        windowResizingAmount = settingsManager.getWindowResizingAmount()
+        setupSubscribers()
+    }
     
     func execute(_ action: Action) {
         switch action {
@@ -28,6 +40,16 @@ final class WindowManager {
         case .smartResize(let direction):
             smartResizeFrontmostWindowTowards(direction)
         }
+    }
+    
+    private func setupSubscribers() {
+        settingsManager
+            .$windowResizingAmount
+            .removeDuplicates()
+            .sink { [weak self] windowResizingAmount in
+                self?.windowResizingAmount = windowResizingAmount
+            }
+            .store(in: &cancellables)
     }
     
     private func placeFrontmostWindow(in screenArea: ScreenArea) {
@@ -102,7 +124,8 @@ final class WindowManager {
         
         let desiredNewWindowPlacement = sizePositionCalculator.calculateShrink(
             towards: shrinkDirection,
-            currentWindowPlacement: currentWindowPlacement
+            currentWindowPlacement: currentWindowPlacement,
+            resizeIncrement: windowResizingAmount.constant
         )
         
         applyWindowPlacement(
@@ -127,7 +150,8 @@ final class WindowManager {
         
         let desiredNewWindowPlacement = sizePositionCalculator.calculateExpansion(
             towards: expandDirection,
-            currentWindowPlacement: currentWindowPlacement
+            currentWindowPlacement: currentWindowPlacement,
+            resizeIncrement: windowResizingAmount.constant
         )
         
         applyWindowPlacement(

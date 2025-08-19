@@ -16,20 +16,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     
     let windowManager: WindowManager
-    let settingsStorageManager: SettingsStorageManager
+    let settingsManager: SettingsManager
     let keybindingManager: KeybindingManager
     let keystrokeManager: KeystrokeManager
     
     override init() {
         Self.logAppStart()
         
-        let windowManager = WindowManager()
         let settingsStorageManager = SettingsStorageManager(userDefaults: .standard)
+        let settingsManager = SettingsManager(storage: settingsStorageManager)
+        let windowManager = WindowManager(settingsManager: settingsManager)
         let keybindingManager = KeybindingManager(settingsStorageManager: settingsStorageManager)
         let keystrokeManager = KeystrokeManager(keybindingManager: keybindingManager, windowManager: windowManager)
         
         self.windowManager = windowManager
-        self.settingsStorageManager = settingsStorageManager
+        self.settingsManager = settingsManager
         self.keybindingManager = keybindingManager
         self.keystrokeManager = keystrokeManager
         
@@ -53,7 +54,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarMenu.setup(
             windowManager: windowManager,
             keybindingManager: keybindingManager,
-            keystrokeManager: keystrokeManager
+            keystrokeManager: keystrokeManager,
+            settingsManager: settingsManager
         )
         statusBarItem.menu = statusBarMenu
     }

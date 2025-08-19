@@ -19,6 +19,7 @@ final class StatusBarMenu: NSMenu {
     private var windowManager: WindowManager?
     private var keybindingManager: KeybindingManager?
     private var keystrokeManager: KeystrokeManager?
+    private var settingsManager: SettingsManager?
     
     private let windowController = NSWindowController()
     private var cancellables = Set<AnyCancellable>()
@@ -26,11 +27,13 @@ final class StatusBarMenu: NSMenu {
     func setup(
         windowManager: WindowManager,
         keybindingManager: KeybindingManager,
-        keystrokeManager: KeystrokeManager
+        keystrokeManager: KeystrokeManager,
+        settingsManager: SettingsManager
     ) {
         self.windowManager = windowManager
         self.keybindingManager = keybindingManager
         self.keystrokeManager = keystrokeManager
+        self.settingsManager = settingsManager
         
         setupMenuButtons()
         setupObservers()
@@ -229,7 +232,11 @@ final class StatusBarMenu: NSMenu {
     }
     
     @objc private func openPreferences() {
-        guard let keystrokeManager, let keybindingManager else {
+        guard
+            let keystrokeManager,
+            let keybindingManager,
+            let settingsManager
+        else {
             Logger.statusBarMenu.error("Improper setup")
             return
         }
@@ -238,7 +245,8 @@ final class StatusBarMenu: NSMenu {
             let hostingViewController = NSHostingController(
                 rootView: SettingsView(
                     keystrokeManager: keystrokeManager,
-                    keybindingManager: keybindingManager
+                    keybindingManager: keybindingManager,
+                    settingsManager: settingsManager
                 )
             )
             let window = NSWindow(contentViewController: hostingViewController)
